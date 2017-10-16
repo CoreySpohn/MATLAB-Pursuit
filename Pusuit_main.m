@@ -3,7 +3,7 @@ q=QMC('QTMconfig16.txt');   %Must create a config file
 minDistToRobot = 1000;  %Free Space needed to move (radius in m)
 maxDist = 0.3;
 
-leftWall = -4115;
+leftWall = -4;
 rightWall = 4267;
 topWall = 3785;
 bottomWall = -3683;
