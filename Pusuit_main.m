@@ -46,12 +46,15 @@ end
     siftedPeopleData = zeroes(1:6);
     n = 0;
     m = 0;
+    
     %% WORKING ON THIS
     for n = 1:length(peopleData)
-        for m = 1:6
-            
-            m = m + 1
-        end
+        dT = peopleData(n,3) - previousPeopleData(n,3) % THE SECOND PART DOESN'T EXIST YET
+        siftedPeopleData(n,1) = peopleData(n,1); % x position
+        siftedPeopleData(n,2) = peopleData(n,2); % y position
+        siftedPeopleData(n,3) = peopleData(n,3); % t time
+        siftedPeopleData(n,4) = Velocity_calc(peopleData(n,1),previousPeopleData(n,1),dT); % x velocity
+        siftedPeopleData(n,5) = Velocity_calc(peopleData(n,2),previousPeopleData(n,2),dT);
         n = n + 1
     end
     % Robot Data
