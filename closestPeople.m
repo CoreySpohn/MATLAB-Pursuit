@@ -11,15 +11,10 @@ function closestResult = closestPeople(peopleData, currentLoc1, currentLoc2, cur
         distance4 = sqrt((peopleData(index,1)-currentLoc4(1))^2+(peopleData(index,2)-currentLoc4(2))^2);
 
         distanceArray1 = [distanceArray1;[distance1,index]];
-        distanceArray2 = [distanceArray2;[distance2,index]];
-        distanceArray3 = [distanceArray3;[distance3,index]];
-        distanceArray4 = [distanceArray4;[distance4,index]];
+        distanceArray2 = [distanceArray1;[distance1,index]];
+        distanceArray3 = [distanceArray1;[distance1,index]];
+        distanceArray4 = [distanceArray1;[distance1,index]];
     end
-    %Check if sortrows() sorts by high to low or low to high
-    distanceArray1 = sortrows(distanceArray1,1);
-    distanceArray2 = sortrows(distanceArray2,1);
-    distanceArray3 = sortrows(distanceArray3,1);
-    distanceArray4 = sortrows(distanceArray4,1);
-    
-    closestResult = [distanceArray1(1:5);distanceArray2(1:5);distanceArray3(1:5);distanceArray4(1:5)];
+    distanceArray = sortrows(distanceArray,1);
+    closestResult = distanceArray(1:5);
 end
