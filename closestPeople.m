@@ -1,3 +1,6 @@
+%This function takes the agent's and robots' position data as the input and
+%outputs an array with the 5 closests people to each robot
+
 function closestResult = closestPeople(peopleData, currentLoc1, currentLoc2, currentLoc3, currentLoc4)
     %% Choose 5 Closest Agents to Robot
     distanceArray = [];
