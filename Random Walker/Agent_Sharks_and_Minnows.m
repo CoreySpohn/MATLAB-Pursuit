@@ -3,9 +3,9 @@ xLimits = [0, 40];
 yLimits = [0, 40];
 minnowSpeed = 1;
 sharkSpeed = 1;
-proximity = 2;
+sharkRange = 2;
 
-n = 1000;
+n = 100;
 startingDirection = [1, 0];
 
 minnowOne = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1);
@@ -16,13 +16,14 @@ minnowFive = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimit
 
 minnowList = [minnowOne, minnowTwo, minnowThree, minnowFour, minnowFive];
 
-shark = Shark([40, randi([1 40],1)], sharkSpeed, [0,0], xLimits, yLimits);
+shark = Shark([40, randi([1 40],1)], sharkSpeed, sharkRange, [0,0], xLimits, yLimits);
 
 for i=1:n
     for j=1:length(minnowList)
         minnowList(j).randomStep();
     end
     
+    shark.chooseMinnow(minnowList);
     shark.pursue(minnowOne);
     
 %     RtoWDistance = sqrt((robotPos(1)-minnowOne.position(1))^2+(robotPos(2)-minnowOne.position(2))^2);
@@ -47,7 +48,7 @@ plot(minnowList(1).historicalPosition(:,1), minnowList(1).historicalPosition(:,2
 hold on;
 plot(minnowList(2).historicalPosition(:,1), minnowList(2).historicalPosition(:,2),'b')
 plot(minnowList(3).historicalPosition(:,1), minnowList(3).historicalPosition(:,2),'g')
-plot(minnowList(4).historicalPosition(:,1), minnowList(4).historicalPosition(:,2),'w')
+plot(minnowList(4).historicalPosition(:,1), minnowList(4).historicalPosition(:,2),'k')
 plot(minnowList(5).historicalPosition(:,1), minnowList(5).historicalPosition(:,2),'c')
 plot(shark.historicalPosition(:,1), shark.historicalPosition(:,2),'ko')
 xLinspace = linspace(xLimits(1), xLimits(2));
