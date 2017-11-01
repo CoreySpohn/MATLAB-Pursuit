@@ -1,60 +1,31 @@
 %% This script creates a person that moves in a random direction and we can test the algorithm
-
-walkerY = randi([1 40],1);
-robotY = randi([1 40],1);
-walkerPos = [0, walkerY];
-robotPos = [20, robotY];
 xLimits = [0, 40];
 yLimits = [0, 40];
-histWalkerPos = [];
-histRobotPos = [];
-step = 1;
-walkerSpeed = 1;
-robotSpeed = 1;
+minnowSpeed = 1;
+sharkSpeed = 1;
 proximity = 2;
 
 n = 1000;
 startingDirection = [1, 0];
 
-minnowOne = Minnow(walkerPos, walkerSpeed, startingDirection, xLimits, yLimits);
+minnowOne = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1);
+minnowTwo = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 0.5);
+minnowThree = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, .21);
+minnowFour = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 5);
+minnowFive = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 3);
+
+minnowList = [minnowOne, minnowTwo, minnowThree, minnowFour, minnowFive];
+
+shark = Shark([40, randi([1 40],1)], sharkSpeed, [0,0], xLimits, yLimits);
 
 for i=1:n
-    minnowOne.randomStep(1);
+    for j=1:length(minnowList)
+        minnowList(j).randomStep();
+    end
     
-    % PURSUIT TIME
-%     if i < 7
-%         robotDirection(1) = walkerDirection(2);
-%         robotDirection(2) = walkerDirection(1);
-%         if abs(robotPos(1) - walkerPos(1) + robotDirection(1)) > abs(robotPos(1) - walkerPos(1) - robotDirection(1))
-%             robotDirection(1) = -robotDirection(1);
-%         end
-%         if abs(robotPos(2) - walkerPos(2) + robotDirection(2)) > abs(robotPos(2) - walkerPos(2) - robotDirection(2))
-%             robotDirection(2) = -robotDirection(2);
-%         end
-%     else
-%         % Calculate the historical velocity for more accuracy
-%         robotDirection(2) = (histWalkerPos(i,1)-histWalkerPos(i-5,1));
-%         robotDirection(1) = (histWalkerPos(i,2)-histWalkerPos(i-5,2));
-%         if abs(robotPos(1) - walkerPos(1) + robotDirection(1)) > abs(robotPos(1) - walkerPos(1) - robotDirection(1))
-%             robotDirection(1) = -robotDirection(1);
-%         end
-%         if abs(robotPos(2) - walkerPos(2) + robotDirection(2)) > abs(robotPos(2) - walkerPos(2) - robotDirection(2))
-%             robotDirection(2) = -robotDirection(2);
-%         end
-%     end
-%     robotXVect = robotDirection(1)*robotSpeed/sqrt(robotDirection(1)^2 + robotDirection(2)^2);
-%     robotYVect = robotDirection(2)*robotSpeed/sqrt(robotDirection(1)^2 + robotDirection(2)^2);
-%     if (xLimits(1) <= robotPos(1) + robotXVect && robotPos(1) + robotXVect <= xLimits(2))
-%         robotPos(1) = robotPos(1) + robotXVect;
-%     end
-%     if (yLimits(1) <= robotPos(2) + robotYVect && robotPos(2) + robotYVect <= yLimits(2));
-%         robotPos(2) = robotPos(2) + robotYVect;
-%     end
-%     robotVect = [robotXVect, robotYVect];
-%     
-%     histRobotPos = [histRobotPos;robotPos];
-%     
-%     RtoWDistance = sqrt((robotPos(1)-walkerPos(1))^2+(robotPos(2)-walkerPos(2))^2);
+    shark.pursue(minnowOne);
+    
+%     RtoWDistance = sqrt((robotPos(1)-minnowOne.position(1))^2+(robotPos(2)-minnowOne.position(2))^2);
 %     fprintf('%i\n',i)
 %     if RtoWDistance <= proximity
 %         n = i;
@@ -62,7 +33,7 @@ for i=1:n
 %         break
 %     end
 %     
-%     if walkerPos(1) >= 39
+%     if minnowOne.position(1) >= 39
 %         fprintf('Walker wins\n')
 %         break
 %     end
@@ -70,9 +41,19 @@ for i=1:n
 end
 figure
 
-plot(minnowOne.historicalPosition(:,1), minnowOne.historicalPosition(:,2),'r',histRobotPos(:,1), histRobotPos(:,2),'b')
-% animatedline(historicalPosition(:,1), historicalPosition(:,2))
+% plot(minnowOne.historicalPosition(:,1), minnowOne.historicalPosition(:,2),'r',histRobotPos(:,1), histRobotPos(:,2),'b')
+
+plot(minnowList(1).historicalPosition(:,1), minnowList(1).historicalPosition(:,2),'r')
+hold on;
+plot(minnowList(2).historicalPosition(:,1), minnowList(2).historicalPosition(:,2),'b')
+plot(minnowList(3).historicalPosition(:,1), minnowList(3).historicalPosition(:,2),'g')
+plot(minnowList(4).historicalPosition(:,1), minnowList(4).historicalPosition(:,2),'w')
+plot(minnowList(5).historicalPosition(:,1), minnowList(5).historicalPosition(:,2),'c')
+plot(shark.historicalPosition(:,1), shark.historicalPosition(:,2),'ko')
 xLinspace = linspace(xLimits(1), xLimits(2));
 yLinspace = linspace(yLimits(1), yLimits(2));
 xlim(xLimits)
 ylim(yLimits)
+
+
+

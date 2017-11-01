@@ -2,25 +2,25 @@
 
 walkerY = randi([1 40],1); % random starting y position for the walker
 robotY = randi([1 40],1); % random starting y position for the robot
-walkerPos = [0, walkerY]; % Starting position of the walker
-robotPos = [35, robotY]; % Starting position of the robot
+walkerPos = [40, walkerY]; % Starting position of the walker
+robotPos = [20, robotY]; % Starting position of the robot
 xLimits = [0, 40]; % Bounds for the arena
 yLimits = [0, 40];
 histWalkerPos = []; % matrix that keeps all of the positions
 histRobotPos = [];
-step = 1; % Increasing this increases the randomness of the walk
+step = 3; % Increasing this increases the randomness of the walk
 walkerSpeed = 1;
 robotSpeed = 1;
 proximity = 2; % How close the robot needs to be to tag the person
 
 n = 1000;
-xDir = 1;
+xDir = -1;
 yDir = 0;
 for i=1:n
     % Compute random x direction and adjust position
     xNum = randi([1 2],1);
     if xNum == 1
-        xDir = xDir + step;
+        xDir = xDir - step;
     end
     
     % Compute random y direction and adjust position
@@ -91,7 +91,7 @@ for i=1:n
         break
     end
     
-    if walkerPos(1) >= 39
+    if walkerPos(1) <= 1
         fprintf('Walker wins\n')
         break
     end

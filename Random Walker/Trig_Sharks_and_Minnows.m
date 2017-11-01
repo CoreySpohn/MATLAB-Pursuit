@@ -1,26 +1,54 @@
 %% This script creates a person that moves in a random direction and we can test the algorithm
 
-walkerY = randi([1 40],1);
-robotY = randi([1 40],1);
-walkerPos = [0, walkerY];
-robotPos = [20, robotY];
-xLimits = [0, 40];
+walkerY = randi([1 40],1); % random starting y position for the walker
+robotY = randi([1 40],1); % random starting y position for the robot
+walkerPos = [0, walkerY]; % Starting position of the walker
+robotPos = [20, robotY]; % Starting position of the robot
+xLimits = [0, 40]; % Bounds for the arena
 yLimits = [0, 40];
-histWalkerPos = [];
+histWalkerPos = []; % matrix that keeps all of the positions
 histRobotPos = [];
-step = 1;
+step = 1; % Increasing this increases the randomness of the walk
 walkerSpeed = 1;
 robotSpeed = 1;
-proximity = 2;
+proximity = 2; % How close the robot needs to be to tag the person
 
 n = 1000;
 xDir = 1;
 yDir = 0;
-
-minnowOne = Minnow
-
 for i=1:n
+    % Compute random x direction and adjust position
+%     xNum = randi([1 2],1);
+%     if xNum == 1
+%         xDir = xDir + step;
+%     end
     
+    % Compute random y direction and adjust position
+    yNum = randi([1 3],1);
+    if yNum == 1
+        yDir = yDir + step;
+    elseif yNum == 2
+        yDir = yDir - step;
+    end
+    xDir = xDir / sqrt(xDir^2 + yDir^2);
+    yDir = yDir / sqrt(xDir^2 + yDir^2);
+    if isnan(xDir) == 1
+        xDir = 0;
+    end
+    if isnan(yDir) == 1
+        yDir = 0;
+    end
+        % Update position if in bounds
+    if (xLimits(1) <= walkerPos(1) + xDir && walkerPos(1) + xDir <= xLimits(2))
+        walkerPos(1) = walkerPos(1) + walkerSpeed*xDir;
+    end
+    if (yLimits(1) <= walkerPos(2) + yDir && walkerPos(2) + yDir <= yLimits(2))
+        % Only update the position when it keeps the agent in bounds
+        walkerPos(2) = walkerPos(2) + walkerSpeed*yDir;
+    end
+    walkerDirection = [xDir, yDir];
+    
+    histWalkerPos = [histWalkerPos;walkerPos];
     
     % PURSUIT TIME
     if i < 7
