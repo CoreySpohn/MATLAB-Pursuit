@@ -89,12 +89,16 @@ classdef Shark < handle
             
             % Stop the loop immediately if all minnows have been caught
             if obj.allCaught == 1
+                obj.steps = obj.steps + 1;
+                obj.historicalPosition = [obj.historicalPosition;obj.position];
                 return
             end
             
             % Stop loop if the marked minnow finishes before it gets caught
             if minnow.successfulCrossing == 1
                 obj.markedMinnow = 0;
+                obj.steps = obj.steps + 1;
+                obj.historicalPosition = [obj.historicalPosition;obj.position];
                 return
             end
             
@@ -140,7 +144,7 @@ classdef Shark < handle
             distance = sqrt((minnow.position(1)-obj.position(1))^2 + (minnow.position(2)-obj.position(2))^2);
             if distance <= obj.range
                 minnow.minnowCaught();
-                fprintf('Minnow %i caught on step %i\n', obj.markedMinnow, obj.steps)
+                fprintf('Minnow %i caught on step %i.\n', obj.markedMinnow, obj.steps)
                 obj.markedMinnow = 0;
             end
             

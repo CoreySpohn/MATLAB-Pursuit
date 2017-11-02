@@ -51,10 +51,14 @@ classdef Minnow < handle
             % First thing is to make sure that the minnow hasn't already
             % been caught or made it to the other side
             if obj.caught == 1
+                obj.historicalPosition = [obj.historicalPosition;obj.position];
+                obj.steps = obj.steps + 1;
                 return
             end
             
             if obj.successfulCrossing == 1
+                obj.historicalPosition = [obj.historicalPosition;obj.position];
+                obj.steps = obj.steps + 1;
                 return
             end
             

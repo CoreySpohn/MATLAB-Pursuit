@@ -2,8 +2,8 @@
 xLimits = [0, 40];
 yLimits = [0, 40];
 minnowSpeed = 1;
-sharkSpeed = 2;
-sharkRange = 4;
+sharkSpeed = 1;
+sharkRange = 2;
 
 n = 1000;
 startingDirection = [1, 0];
@@ -61,5 +61,5 @@ for ii=1:length(shark.historicalPosition)
     ylim(yLimits)
     pause(0.1)
     title(ii)
-
+    getfra
 end
