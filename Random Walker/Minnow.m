@@ -15,6 +15,7 @@ classdef Minnow < handle
         successfulCrossing
         steps
         caught
+        caughtStep
     end    
     
     methods (Static)
@@ -42,8 +43,9 @@ classdef Minnow < handle
             obj.successfulCrossing = 0; % if 1 then they have reached the xLimit
             obj.stepsize = stepsize; % This controls how fast they can change direction
             obj.ID = ID; % The minnows number or ID
-            obj.steps = 0; % counts the number of steps that the minnow takes
+            obj.steps = 1; % counts the number of steps that the minnow takes
             obj.caught = 0; % This will serve to tell whether the minnow has been caught
+            obj.caughtStep = intmax; % This keeps track of when they got caught
         end
 
         function obj = randomStep(obj)
@@ -52,13 +54,11 @@ classdef Minnow < handle
             % been caught or made it to the other side
             if obj.caught == 1
                 obj.historicalPosition = [obj.historicalPosition;obj.position];
-                obj.steps = obj.steps + 1;
                 return
             end
             
             if obj.successfulCrossing == 1
                 obj.historicalPosition = [obj.historicalPosition;obj.position];
-                obj.steps = obj.steps + 1;
                 return
             end
             
@@ -67,7 +67,7 @@ classdef Minnow < handle
             xNum = randi([1 3],1);
             if xNum == 1
                 obj.direction(1) = obj.direction(1) + obj.stepsize;
-            elseif xNum == 2 && (0 < obj.direction(1) - obj.stepsize)
+            elseif xNum == 3 && (0 < obj.direction(1) - obj.stepsize)
                 obj.direction(1) = obj.direction(1) - obj.stepsize;
             end
             
@@ -123,13 +123,8 @@ classdef Minnow < handle
             % Update the list that holds all of the x and y positions for
             % the entire test
             obj.historicalPosition = [obj.historicalPosition;obj.position];
-            obj.steps = obj.steps + 1;
         end
         
-        function obj = minnowCaught(obj)
-            %% This function will just mark the minnow as caught
-            obj.caught = 1;
-        end
     end
     
 end
