@@ -5,21 +5,22 @@ minnowSpeed = 1;
 sharkSpeed = 2;
 sharkRange = 2;
 
-n = 1000;
+n = 50;
 startingDirection = [1, 0];
 
-minnowOne = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1, 1);
-minnowTwo = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 0.1, 2);
-minnowThree = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, .1, 3);
-minnowFour = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1, 4);
-minnowFive = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1, 5);
-minnowSix = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1, 6);
-minnowSeven = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1, 7);
+minnowOne = Minnow([0, randi([1 40],1)], 1, startingDirection, xLimits, yLimits, 1, 1);
+minnowTwo = Minnow([0, randi([1 40],1)], 0.5, startingDirection, xLimits, yLimits, 0.1, 2);
+minnowThree = Minnow([0, randi([1 40],1)], 1.3, startingDirection, xLimits, yLimits, .1, 3);
+minnowFour = Minnow([0, randi([1 40],1)], 1.5, startingDirection, xLimits, yLimits, 1, 4);
+minnowFive = Minnow([0, randi([1 40],1)], 0.75, startingDirection, xLimits, yLimits, 1, 5);
+minnowSix = Minnow([0, randi([1 40],1)], 0.25, startingDirection, xLimits, yLimits, 1, 6);
+minnowSeven = Minnow([0, randi([1 40],1)], 0.7, startingDirection, xLimits, yLimits, 1, 7);
 
 minnowList = [minnowOne, minnowTwo, minnowThree, minnowFour, minnowFive, minnowSix, minnowSeven];
 
-sharkOne = Shark([40, randi([1 20],1)], sharkSpeed, sharkRange, [-1,0], xLimits, yLimits, 1);
-sharkTwo = Shark([40, randi([21 40],1)], sharkSpeed, sharkRange, [-1,0], xLimits, yLimits, 2);
+sharkOne = Shark([40, randi([1 15],1)], sharkSpeed, sharkRange, [-1,0], xLimits, yLimits, 1);
+sharkTwo = Shark([40, randi([15 30],1)], sharkSpeed, sharkRange, [-1,0], xLimits, yLimits, 2);
+% sharkThree = Shark([40, randi([30 40],1)], sharkSpeed, sharkRange, [-1,0], xLimits, yLimits, 3);
 sharkList = [sharkOne, sharkTwo];
 
 for i=1:n
@@ -31,14 +32,13 @@ for i=1:n
     
     for ii=1:length(sharkList)
         %% Make sharks react to the minnows        
-        if sharkList(ii).markedMinnow == 0 && sharkList(ii).allCaught == 0
+        sharkList(ii).steps = sharkList(ii).steps + 1;
+        if sharkList(ii).markedMinnow ~= 0 && sharkList(ii).allCaught == 0
             % If no minnow is marked for pursuit then choose one
-            fprintf('Shark %i choosing on step %i\n', ii, i)
-            sharkList(ii).chooseMinnow(minnowList);
-        end
-        if sharkList(ii).allCaught == 0
-            sharkList(ii).pursue(minnowList(sharkList(ii).markedMinnow),minnowList);
-            sharkList(ii).steps = sharkList(ii).steps + 1;
+            sharkList(ii).pursueCurrent(minnowList(sharkList(ii).markedMinnow),minnowList);
+        elseif sharkList(ii).allCaught == 0
+            sharkList(ii).chooseMinnow2(minnowList);
+            sharkList(ii).pursueCurrent(minnowList(sharkList(ii).markedMinnow),minnowList);
         else
             for ij=1:length(sharkList)
                 % Tell all sharks that the minnows have been caught
@@ -48,8 +48,8 @@ for i=1:n
                 end
                 sharkList(ij).allCaught = 1;
             end
-            
         end
+        
     end
     
 end
@@ -67,6 +67,7 @@ for ii=1:min(length(sharkList(1).historicalPosition),length(sharkList(2).histori
     plot(minnowList(7).historicalPosition(:,1), minnowList(7).historicalPosition(:,2),'m-')
     plot(sharkList(1).historicalPosition(:,1), sharkList(1).historicalPosition(:,2),'k-')
     plot(sharkList(2).historicalPosition(:,1), sharkList(2).historicalPosition(:,2),'r-')
+%     plot(sharkList(3).historicalPosition(:,1), sharkList(3).historicalPosition(:,2),'b-')
     plot(minnowList(1).historicalPosition(ii,1), minnowList(1).historicalPosition(ii,2),'rs','markerfacecolor','r')
     plot(minnowList(2).historicalPosition(ii,1), minnowList(2).historicalPosition(ii,2),'bs','markerfacecolor','b')
     plot(minnowList(3).historicalPosition(ii,1), minnowList(3).historicalPosition(ii,2),'gs','markerfacecolor','g')
@@ -76,10 +77,11 @@ for ii=1:min(length(sharkList(1).historicalPosition),length(sharkList(2).histori
     plot(minnowList(7).historicalPosition(ii,1), minnowList(7).historicalPosition(ii,2),'ms','markerfacecolor','m')
     plot(sharkList(1).historicalPosition(ii,1), sharkList(1).historicalPosition(ii,2),'ko','markerfacecolor','k')
     plot(sharkList(2).historicalPosition(ii,1), sharkList(2).historicalPosition(ii,2),'ro','markerfacecolor','r')
-    hold off
+%     plot(sharkList(3).historicalPosition(ii,1), sharkList(3).historicalPosition(ii,2),'bo','markerfacecolor','b')
+    title(ii)
     xlim(xLimits)
     ylim(yLimits)
     pause(0.05)
-    title(ii)
     
+    hold off
 end

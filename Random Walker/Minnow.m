@@ -43,7 +43,7 @@ classdef Minnow < handle
             obj.successfulCrossing = 0; % if 1 then they have reached the xLimit
             obj.stepsize = stepsize; % This controls how fast they can change direction
             obj.ID = ID; % The minnows number or ID
-            obj.steps = 1; % counts the number of steps that the minnow takes
+            obj.steps = 0; % counts the number of steps that the minnow takes
             obj.caught = 0; % This will serve to tell whether the minnow has been caught
             obj.caughtStep = intmax; % This keeps track of when they got caught
         end
@@ -115,7 +115,7 @@ classdef Minnow < handle
             end
             
             % Check to see whether the minnow has gotten to the other side
-            if obj.position(1) == obj.xLimits(2)
+            if obj.position(1) == abs(obj.xLimits(2)-1)
                 fprintf('Minnow %i wins on step %i.\n', obj.ID, obj.steps)
                 obj.successfulCrossing = 1;
             end
