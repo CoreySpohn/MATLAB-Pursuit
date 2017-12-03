@@ -2,19 +2,19 @@
 xLimits = [0, 40];
 yLimits = [0, 40];
 minnowSpeed = 1;
-sharkSpeed = 2;
+sharkSpeed = 1.5;
 sharkRange = 2;
 
-n = 50;
+n = 100;
 startingDirection = [1, 0];
 
-minnowOne = Minnow([0, randi([1 40],1)], 1, startingDirection, xLimits, yLimits, 1, 1);
-minnowTwo = Minnow([0, randi([1 40],1)], 0.5, startingDirection, xLimits, yLimits, 0.1, 2);
-minnowThree = Minnow([0, randi([1 40],1)], 1.3, startingDirection, xLimits, yLimits, .1, 3);
-minnowFour = Minnow([0, randi([1 40],1)], 1.5, startingDirection, xLimits, yLimits, 1, 4);
-minnowFive = Minnow([0, randi([1 40],1)], 0.75, startingDirection, xLimits, yLimits, 1, 5);
-minnowSix = Minnow([0, randi([1 40],1)], 0.25, startingDirection, xLimits, yLimits, 1, 6);
-minnowSeven = Minnow([0, randi([1 40],1)], 0.7, startingDirection, xLimits, yLimits, 1, 7);
+minnowOne = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1, 1);
+minnowTwo = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 0.1, 2);
+minnowThree = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, .1, 3);
+minnowFour = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1, 4);
+minnowFive = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1, 5);
+minnowSix = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1, 6);
+minnowSeven = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1, 7);
 
 minnowList = [minnowOne, minnowTwo, minnowThree, minnowFour, minnowFive, minnowSix, minnowSeven];
 
@@ -26,27 +26,30 @@ sharkList = [sharkOne, sharkTwo];
 for i=1:n
     for j=1:length(minnowList)
         % Make all of the minnows move
-        minnowList(j).randomStep();
         minnowList(j).steps = minnowList(j).steps + 1;
+        minnowList(j).randomStep();
     end
     
     for ii=1:length(sharkList)
-        %% Make sharks react to the minnows        
+        %% Make sharks react to the minnows
         sharkList(ii).steps = sharkList(ii).steps + 1;
         if sharkList(ii).markedMinnow ~= 0 && sharkList(ii).allCaught == 0
-            % If no minnow is marked for pursuit then choose one
+            % If there is a marked minnow already then pursue it
             sharkList(ii).pursueCurrent(minnowList(sharkList(ii).markedMinnow),minnowList);
         elseif sharkList(ii).allCaught == 0
             sharkList(ii).chooseMinnow2(minnowList);
-            sharkList(ii).pursueCurrent(minnowList(sharkList(ii).markedMinnow),minnowList);
-        else
-            for ij=1:length(sharkList)
-                % Tell all sharks that the minnows have been caught
-                % and which step it happened on
-                if length(sharkList(ij).historicalPosition) < sharkList(ii).historicalPosition
-                    sharkList(ij).historicalPosition = [sharkList(ij).historicalPosition;sharkList(ij).position];
+            if sharkList(ii).allCaught == 1
+                for ij=1:length(sharkList)
+                    % Tell all sharks that the minnows have been caught
+                    % and which step it happened on
+                    if length(sharkList(ij).historicalPosition) < sharkList(ii).historicalPosition
+                        sharkList(ij).historicalPosition = [sharkList(ij).historicalPosition;sharkList(ij).position];
+                    end
+                    sharkList(ij).allCaught = 1;
                 end
-                sharkList(ij).allCaught = 1;
+            
+            else
+                sharkList(ii).pursueCurrent(minnowList(sharkList(ii).markedMinnow),minnowList);
             end
         end
         
