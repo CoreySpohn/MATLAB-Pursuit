@@ -12,10 +12,9 @@ classdef Minnow < handle
         yLimits
         stepsize
         ID
-        successfulCrossing
         steps
-        caught
-        caughtStep
+        finished
+        finishedStep
     end    
     
     methods (Static)
@@ -40,24 +39,18 @@ classdef Minnow < handle
             obj.direction = startingDirection; % objects [xDirection, yDirection]
             obj.xLimits = xLimits;
             obj.yLimits = yLimits;
-            obj.successfulCrossing = 0; % if 1 then they have reached the xLimit
             obj.stepsize = stepsize; % This controls how fast they can change direction
             obj.ID = ID; % The minnows number or ID
             obj.steps = 0; % counts the number of steps that the minnow takes
-            obj.caught = 0; % This will serve to tell whether the minnow has been caught
-            obj.caughtStep = intmax; % This keeps track of when they got caught
+            obj.finished = 0; % This will serve to tell whether the minnow has been caught
+            obj.finishedStep = intmax; % This keeps track of when they got caught
         end
 
         function obj = randomStep(obj)
             %% This function is used to make the agent take a step
             % First thing is to make sure that the minnow hasn't already
             % been caught or made it to the other side
-            if obj.caught == 1
-                obj.historicalPosition = [obj.historicalPosition;obj.position];
-                return
-            end
-            
-            if obj.successfulCrossing == 1
+            if obj.finished == 1
                 obj.historicalPosition = [obj.historicalPosition;obj.position];
                 return
             end
@@ -115,9 +108,9 @@ classdef Minnow < handle
             end
             
             % Check to see whether the minnow has gotten to the other side
-            if obj.position(1) == abs(obj.xLimits(2)-1)
+            if obj.position(1) >= abs(obj.xLimits(2)-0.5)
                 fprintf('Minnow %i wins on step %i.\n', obj.ID, obj.steps)
-                obj.successfulCrossing = 1;
+                obj.finished = 1;
             end
             
             % Update the list that holds all of the x and y positions for

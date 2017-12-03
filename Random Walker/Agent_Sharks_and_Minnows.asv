@@ -59,7 +59,7 @@ end
 
 %% Plot everything
 
-fig1 = figure('Position',[10 10 800 800]);
+fig1 = figure([876 656]);
 for ii=1:min(length(sharkList(1).historicalPosition),length(sharkList(2).historicalPosition))
     % Plot lines showing the entire motion
     plot(minnowList(1).historicalPosition(:,1), minnowList(1).historicalPosition(:,2),'r-'), hold on, grid on
@@ -101,7 +101,7 @@ for ii=1:min(length(sharkList(1).historicalPosition),length(sharkList(2).histori
         num = ['0', int2str(ii)];
     end
     figureName = ['Video\figure', num, '.png'];
-%     print(fig1, figureName)
+    set()
     saveas(fig1, figureName)
     hold off
 end
