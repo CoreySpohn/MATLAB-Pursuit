@@ -1,0 +1,20 @@
+# IP address of the QTM_RT server
+<IP:192.168.253.1> # Local host
+# Port used
+<PORT:22222>
+<UDPPORT:0> # Use random port
+<STREAM:0>
+<FREQ:Frequency:3>
+<3D:0>
+<3D-NoLabels:48>
+<AnalogSingle:0>
+<ForceSingle:0>
+<6DOF:0>
+<6DOF-Euler:1>
+<2D:0>
+<2D-Lin:0>
+<3D-Residual:0>
+<3D-NoLabels-Residual:0>
+<6DOF-Residual:0>
+<6DOF-Euler-Residual:0>
+<GazeVector:0>
