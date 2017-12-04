@@ -11,7 +11,7 @@
 
 function QMCdemo(n)        % n is the amount of frames the demo should retrieve before disconnecting.
 
-qtm = QMC('QMC_conf.txt'); % Creates the objecthandle 'qtm' which keeps the connection alive.
+qtm = QMC('QMCconfig14.txt'); % Creates the objecthandle 'qtm' which keeps the connection alive.
 
 the3dlabels = QMC(qtm, '3dlabels');
 the6doflabels = QMC(qtm, '6doflabels');
