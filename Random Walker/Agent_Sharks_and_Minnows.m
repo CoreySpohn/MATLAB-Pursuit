@@ -35,7 +35,7 @@ for i=1:n
         sharkList(ii).steps = sharkList(ii).steps + 1;
         if sharkList(ii).markedMinnow ~= 0 && sharkList(ii).allCaught == 0
             % If there is a marked minnow already then pursue it
-            sharkList(ii).pursueCurrent(minnowList(sharkList(ii).markedMinnow),minnowList);
+            sharkList(ii).pursueBasic(minnowList(sharkList(ii).markedMinnow),minnowList);
         elseif sharkList(ii).allCaught == 0
             sharkList(ii).chooseMinnow2(minnowList);
             if sharkList(ii).allCaught == 1
@@ -60,6 +60,8 @@ end
 %% Plot everything
 
 fig1 = figure('Position',[10 10 800 800]);
+yellowColor = 1/255*[150 150 0];
+greyColor = 1/255*[120 120 120];
 for ii=1:min(length(sharkList(1).historicalPosition),length(sharkList(2).historicalPosition))
     % Plot lines showing the entire motion
     plot(minnowList(1).historicalPosition(:,1), minnowList(1).historicalPosition(:,2),'r-'), hold on, grid on
@@ -67,10 +69,10 @@ for ii=1:min(length(sharkList(1).historicalPosition),length(sharkList(2).histori
     plot(minnowList(3).historicalPosition(:,1), minnowList(3).historicalPosition(:,2),'g-')
     plot(minnowList(4).historicalPosition(:,1), minnowList(4).historicalPosition(:,2),'k-')
     plot(minnowList(5).historicalPosition(:,1), minnowList(5).historicalPosition(:,2),'c-')
-    plot(minnowList(6).historicalPosition(:,1), minnowList(6).historicalPosition(:,2),'y-')
+    plot(minnowList(6).historicalPosition(:,1), minnowList(6).historicalPosition(:,2), 'Color', yellowColor)
     plot(minnowList(7).historicalPosition(:,1), minnowList(7).historicalPosition(:,2),'m-')
     plot(sharkList(1).historicalPosition(:,1), sharkList(1).historicalPosition(:,2),'k-')
-    plot(sharkList(2).historicalPosition(:,1), sharkList(2).historicalPosition(:,2),'r-')
+    plot(sharkList(2).historicalPosition(:,1), sharkList(2).historicalPosition(:,2),'Color', greyColor)
 %     plot(sharkList(3).historicalPosition(:,1), sharkList(3).historicalPosition(:,2),'b-')
     
     % Plot the point at every interval as a marker to see it in motion
@@ -79,10 +81,10 @@ for ii=1:min(length(sharkList(1).historicalPosition),length(sharkList(2).histori
     plot(minnowList(3).historicalPosition(ii,1), minnowList(3).historicalPosition(ii,2),'gs','markerfacecolor','g')
     plot(minnowList(4).historicalPosition(ii,1), minnowList(4).historicalPosition(ii,2),'ks','markerfacecolor','k')
     plot(minnowList(5).historicalPosition(ii,1), minnowList(5).historicalPosition(ii,2),'cs','markerfacecolor','c')
-    plot(minnowList(6).historicalPosition(ii,1), minnowList(6).historicalPosition(ii,2),'ys','markerfacecolor','y')
+    plot(minnowList(6).historicalPosition(ii,1), minnowList(6).historicalPosition(ii,2),'s','Color',yellowColor,'markerfacecolor', yellowColor)
     plot(minnowList(7).historicalPosition(ii,1), minnowList(7).historicalPosition(ii,2),'ms','markerfacecolor','m')
     plot(sharkList(1).historicalPosition(ii,1), sharkList(1).historicalPosition(ii,2),'ko','markerfacecolor','k')
-    plot(sharkList(2).historicalPosition(ii,1), sharkList(2).historicalPosition(ii,2),'ro','markerfacecolor','r')
+    plot(sharkList(2).historicalPosition(ii,1), sharkList(2).historicalPosition(ii,2),'o','Color',greyColor,'markerfacecolor',greyColor)
 %     plot(sharkList(3).historicalPosition(ii,1), sharkList(3).historicalPosition(ii,2),'bo','markerfacecolor','b')
     title(ii)
     xlim(xLimits)

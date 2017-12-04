@@ -42,7 +42,7 @@ classdef Minnow < handle
             obj.stepsize = stepsize; % This controls how fast they can change direction
             obj.ID = ID; % The minnows number or ID
             obj.steps = 0; % counts the number of steps that the minnow takes
-            obj.finished = 0; % This will serve to tell whether the minnow has been caught
+            obj.finished = 0; % This will serve to tell whether the minnow has been caught or reached the other side
             obj.finishedStep = intmax; % This keeps track of when they got caught
         end
 
