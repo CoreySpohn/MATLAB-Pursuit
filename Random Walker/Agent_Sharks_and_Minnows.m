@@ -35,7 +35,7 @@ for i=1:n
         sharkList(ii).steps = sharkList(ii).steps + 1;
         if sharkList(ii).markedMinnow ~= 0 && sharkList(ii).allCaught == 0
             % If there is a marked minnow already then pursue it
-            sharkList(ii).pursueBasic(minnowList(sharkList(ii).markedMinnow),minnowList);
+            sharkList(ii).pursueCurrent(minnowList(sharkList(ii).markedMinnow),minnowList);
         elseif sharkList(ii).allCaught == 0
             sharkList(ii).chooseMinnow2(minnowList);
             if sharkList(ii).allCaught == 1
@@ -104,6 +104,6 @@ for ii=1:min(length(sharkList(1).historicalPosition),length(sharkList(2).histori
     end
     figureName = ['Video\figure', num, '.png'];
 %     print(fig1, figureName)
-    saveas(fig1, figureName)
+%     saveas(fig1, figureName)
     hold off
 end

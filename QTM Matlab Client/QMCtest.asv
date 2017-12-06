@@ -1,7 +1,7 @@
 qtm=QMC('QMC_conf_6.txt');
 
 timeIncrement = .01;  % Number of seconds between measurements
-seconds = 180;  % Length of trial in seconds
+seconds = 120;  % Length of trial in seconds
 numOfMinnows = 2;  % Number of minnows
 numOfSharks = 1;  % Number of sharks
 

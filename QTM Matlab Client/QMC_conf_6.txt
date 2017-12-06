@@ -25,12 +25,12 @@
 
 # Output data size to MATLAB. Amount of objects sent to output for each
 # component. Enter a value for each component. Use 0 to disable a component.
-<3D:2>                   # Max number of markers to receive.
+<3D:0>                   # Max number of markers to receive.
 <3D-NoLabels:0>          # Max number of unlabeled markers to receive.
 <AnalogSingle:0>         # Max number of analog devices to receive data from.
 <ForceSingle:0>          # Max number of forces to receive.
 <6DOF:0>                 # Max number of 6DOF bodies to receive.
-<6DOF-Euler:1>           # Max number of 6DOF-Euler bodies to receive.
+<6DOF-Euler:4>           # Max number of 6DOF-Euler bodies to receive.
 <2D:0>                   # Max number of 2D points to receive from one camera.
 <2D-Lin:0>               # Max number of 2D-Lin points to receive from one camera.
 <3D-Residual:0>          # Max number of markers with residual to receive.
