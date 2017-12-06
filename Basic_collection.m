@@ -1,5 +1,5 @@
 %% Setup QTM
-q=QMC('QTM_conf_3.txt');   %Must create a config file
+q=QMC('QMC_conf_6.txt');   %Must create a config file
 
 % %% Setup Serial Communication
 % try
@@ -18,8 +18,17 @@ q=QMC('QTM_conf_3.txt');   %Must create a config file
 %     fprintf('Matlab serial port failed to be created.\n');
 %     return
 % end
+the3dlabels = QMC(qtm, '3dlabels');
+the6doflabels = QMC(qtm, '6doflabels');
+for i = 1:100
+    [frameinfo data] = QMC(qtm, 'frameinfo') % Gather data from QTM. This configuration gets the frame info and
+                                                             % three different types of data from QTM. Note that the number of
+                                                             % data types must be the same as in the config-file.
+                                                             
+end
 
-[data_3d, data_6dof] = QMC(q);
+QMC(qtm, 'disconnect'); % Terminates the QMC-object.
 
+clear mex
 %% Whether the names are in a column, whether they show up in the same place if they disappear,
 % How easy it is to separarte the values. 
