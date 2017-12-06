@@ -1,5 +1,5 @@
 %% Setup QTM
-q=QMC('QMC_conf_6.txt');   %Must create a config file
+qtm=QMC('QMC_conf_6.txt');   %Must create a config file
 
 % %% Setup Serial Communication
 % try
