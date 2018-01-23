@@ -19,6 +19,7 @@ classdef Minnow < handle
         minnowsForce
         sharksForce
         wallsForce
+        totalForce
         mass
         radius
         timeInterval
@@ -116,17 +117,29 @@ classdef Minnow < handle
             obj.historicalPosition = [obj.historicalPosition;obj.position];
         end
         
+        
+        
+        %% These functions are for the social force evasion model
         function obj = socialForceStep(obj, minnowList, sharkList)
-            return
+            % This function will call the force functions and use their
+            % outputs to move the minnow
+            obj.minnowGoalForce();
+            obj.minnowToMinnowForce(minnowList);
+            obj.sharkToMinnowForce(sharkList);
+            obj.obstacleToMinnowForce();
+            obj.totalForce = obj.minnowsForce + obj.sharksForce + obj.wallsForce;
+            acceleration = obj.totalForce / obj.mass;
+            obj.velocity = obj.velocity + acceleration*obj.timeInterval;
         end
         
         function obj = minnowGoalForce(obj)
             % This function will generate a force in the x direction that
             % faces towards the finish line. For the current simulations it
             % only needs to be in the positive x direction
+            c = 0.1; % this variable can be adjusted to give this force more influence if necessary
             goalVector = [1,0];
             goalVelocity = obj.speed*goalVector;
-            obj.goalForce = obj.mass*0.1*(goalVelocity)/obj.timeInterval;
+            obj.goalForce = obj.mass*c*(goalVelocity)/obj.timeInterval;
         end
         
         function obj = minnowToMinnowForce(obj, minnowList)
@@ -141,7 +154,8 @@ classdef Minnow < handle
                     % itself
                     summedForce = summedForce + 0;
                 else
-                    % Figure out the force for each other minnow
+                    % Figure out the force for each other minnow, this
+                    % calculation is following the social force model
                     radiusSum = obj.radius+minnowList(i).radius;
                     distance = norm(obj.position-minnowList(i).position);
                     unitVector = (obj.position-minnowList(i).position)/distance;
@@ -152,6 +166,11 @@ classdef Minnow < handle
                     frictionTerm = k2 * max(radiusSum-distance, 0) * unitVector * perpVelDiff;
                     summedForce = summedForce + repulsiveTerm + compressiveTerm + frictionTerm;
                 end
+                % It's worth mentioning that you could make this a lot
+                % faster by using the opposite force to the other minnow
+                % ahead of time. So like when you calculate the force of
+                % minnow 4 on minnow 1 you also assign the opposite to
+                % minnow 4 from minnow 1.
             end
             obj.minnowsForce = summedForce/length(minnowList);
         end
@@ -206,19 +225,16 @@ classdef Minnow < handle
                 closeYLimit = obj.yLimits(1);
             end
             
-            
-            
             % Figure out the force for each the two closest walls
-            distance = norm(obj.position-sharkList(i).position);
-            unitVector = (obj.position-sharkList(i).position)/distance;
+            distance = norm(obj.position(1)-[closeXLimit,closeYLimit]);
+            unitVector = (obj.position-[closeXLimit,closeYLimit])/distance;
             velocityDifference = -obj.position;
             perpVelDiff = -unitVector(2)*velocityDifference(1) + unitVector(1)*velocityDifference(2);
             repulsiveTerm = A * exp((obj.radius-distance)/B) * unitVector;
             compressiveTerm = k1 * max(obj.radius-distance, 0) * unitVector;
             frictionTerm = k2 * max(obj.radius-distance, 0) * unitVector * perpVelDiff;
             summedForce = summedForce + repulsiveTerm + compressiveTerm + frictionTerm;
-            obj.sharksForce = summedForce/length(sharkList);
+            obj.wallsForce = summedForce;
         end
     end
-    
 end
