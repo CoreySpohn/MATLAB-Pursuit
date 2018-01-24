@@ -3,7 +3,8 @@ classdef Minnow < handle
     %   Detailed explanation goes here
     
     properties
-        position
+        currentPosition
+        nextPosition
         velocity
         speed
         historicalPosition
@@ -28,7 +29,7 @@ classdef Minnow < handle
     methods
         function obj = Minnow(pos, speed, startingDirection, xLimits, yLimits, stepsize, ID)
             %% This is the constructor for the minnow
-            obj.position = pos; % set the minnow's new position
+            obj.currentPosition = pos; % set the minnow's new position
             obj.velocity = [0, 0]; % start the minnow at zero velocity
             obj.speed = speed; % set the minnow's max speed
             obj.historicalPosition = []; % Create this for future use
@@ -50,7 +51,7 @@ classdef Minnow < handle
             % First thing is to make sure that the minnow hasn't already
             % been caught or made it to the other side
             if obj.finished == 1
-                obj.historicalPosition = [obj.historicalPosition;obj.position];
+                obj.historicalPosition = [obj.historicalPosition;obj.currentPosition];
                 return
             end
             
@@ -83,38 +84,38 @@ classdef Minnow < handle
             end
             
             % Update the agent's position
-            if obj.xLimits(1) <= obj.position(1) + obj.direction(1) && obj.position(1) + obj.direction(1) <= obj.xLimits(2)
+            if obj.xLimits(1) <= obj.currentPosition(1) + obj.direction(1) && obj.currentPosition(1) + obj.direction(1) <= obj.xLimits(2)
                 % Check to make sure that the agent is within the limits of
                 % field and if so update it
-                obj.position(1) = obj.position(1) + obj.speed * obj.direction(1);
-            elseif obj.position(1) + obj.direction(1) <= obj.xLimits(1)
+                obj.currentPosition(1) = obj.currentPosition(1) + obj.speed * obj.direction(1);
+            elseif obj.currentPosition(1) + obj.direction(1) <= obj.xLimits(1)
                 % if the position would be less than the minimum x limit,
                 % set the position to the minumum x limit
-                obj.position(1) = obj.xLimits(2);
+                obj.currentPosition(1) = obj.xLimits(2);
             else
                 % If neither of the previous ones are true then set it to
                 % the maximum x limit
-                obj.position(1) = obj.xLimits(2);
+                obj.currentPosition(1) = obj.xLimits(2);
             end
             
             % Same as the previous block but for the y direction
-            if obj.yLimits(1) <= obj.position(2) + obj.direction(2) && obj.position(2) + obj.direction(2) <= obj.yLimits(2)
-                obj.position(2) = obj.position(2) + obj.speed * obj.direction(2);
-            elseif obj.position(2) + obj.direction(2) <= obj.yLimits(1)
-                obj.position(2) = obj.yLimits(1);
+            if obj.yLimits(1) <= obj.currentPosition(2) + obj.direction(2) && obj.currentPosition(2) + obj.direction(2) <= obj.yLimits(2)
+                obj.currentPosition(2) = obj.currentPosition(2) + obj.speed * obj.direction(2);
+            elseif obj.currentPosition(2) + obj.direction(2) <= obj.yLimits(1)
+                obj.currentPosition(2) = obj.yLimits(1);
             else
-                obj.position(2) = obj.yLimits(2);
+                obj.currentPosition(2) = obj.yLimits(2);
             end
             
             % Check to see whether the minnow has gotten to the other side
-            if obj.position(1) >= abs(obj.xLimits(2)-0.5)
+            if obj.currentPosition(1) >= abs(obj.xLimits(2)-0.5)
                 fprintf('Minnow %i wins on step %i.\n', obj.ID, obj.steps)
                 obj.finished = 1;
             end
             
             % Update the list that holds all of the x and y positions for
             % the entire test
-            obj.historicalPosition = [obj.historicalPosition;obj.position];
+            obj.historicalPosition = [obj.historicalPosition;obj.currentPosition];
         end
         
         
@@ -125,11 +126,32 @@ classdef Minnow < handle
             % outputs to move the minnow
             obj.minnowGoalForce();
             obj.minnowToMinnowForce(minnowList);
-            obj.sharkToMinnowForce(sharkList);
-            obj.obstacleToMinnowForce();
-            obj.totalForce = obj.minnowsForce + obj.sharksForce + obj.wallsForce;
+%             obj.sharkToMinnowForce(sharkList);
+%             obj.obstacleToMinnowForce();
+%             obj.totalForce = obj.minnowsForce + obj.sharksForce + obj.wallsForce;
+            obj.totalForce = obj.minnowsForce;
             acceleration = obj.totalForce / obj.mass;
             obj.velocity = obj.velocity + acceleration*obj.timeInterval;
+            obj.nextPosition = obj.currentPosition + obj.velocity*obj.timeInterval;
+            
+            % Make sure that the minnow doesn't get to leave the field of
+            % play
+            if obj.nextPosition(1) < obj.xLimits(1)
+                obj.nextPosition(1) = obj.xLimits(1);
+            end
+            
+            if obj.nextPosition(2) < obj.yLimits(1)
+                obj.nextPosition(2) = obj.yLimits(1);
+            elseif obj.nextPosition(2) > obj.yLimits(2)
+                obj.nextPosition(2) = obj.yLimits(2);
+            end
+            
+            if obj.nextPosition(1) >= abs(obj.xLimits(2)-0.5)
+                fprintf('Minnow %i wins on step %i.\n', obj.ID, obj.steps)
+                obj.finished = 1;
+            end
+            
+            obj.historicalPosition = [obj.historicalPosition;obj.nextPosition];
         end
         
         function obj = minnowGoalForce(obj)
@@ -157,14 +179,15 @@ classdef Minnow < handle
                     % Figure out the force for each other minnow, this
                     % calculation is following the social force model
                     radiusSum = obj.radius+minnowList(i).radius;
-                    distance = norm(obj.position-minnowList(i).position);
-                    unitVector = (obj.position-minnowList(i).position)/distance;
-                    velocityDifference = minnowList(i).position-obj.position;
+                    distance = norm(obj.currentPosition-minnowList(i).currentPosition);
+                    unitVector = (obj.currentPosition-minnowList(i).currentPosition)/distance;
+                    velocityDifference = minnowList(i).currentPosition-obj.currentPosition;
                     perpVelDiff = -unitVector(2)*velocityDifference(1) + unitVector(1)*velocityDifference(2);
                     repulsiveTerm = A * exp((radiusSum-distance)/B) * unitVector;
                     compressiveTerm = k1 * max(radiusSum-distance, 0) * unitVector;
                     frictionTerm = k2 * max(radiusSum-distance, 0) * unitVector * perpVelDiff;
-                    summedForce = summedForce + repulsiveTerm + compressiveTerm + frictionTerm;
+                    summedForce = summedForce + repulsiveTerm + compressiveTerm + frictionTerm
+%                     fprintf('Minnow %i acting on minnow %i is: %i\n', i, obj.ID, summedForce)
                 end
                 % It's worth mentioning that you could make this a lot
                 % faster by using the opposite force to the other minnow
@@ -191,9 +214,9 @@ classdef Minnow < handle
                 else
                     % Figure out the force for each other shark
                     radiusSum = obj.radius+sharkList(i).radius;
-                    distance = norm(obj.position-sharkList(i).position);
-                    unitVector = (obj.position-sharkList(i).position)/distance;
-                    velocityDifference = sharkList(i).position-obj.position;
+                    distance = norm(obj.currentPosition-sharkList(i).position);
+                    unitVector = (obj.currentPosition-sharkList(i).position)/distance;
+                    velocityDifference = sharkList(i).position-obj.currentPosition;
                     perpVelDiff = -unitVector(2)*velocityDifference(1) + unitVector(1)*velocityDifference(2);
                     repulsiveTerm = A * exp((radiusSum-distance)/B) * unitVector;
                     compressiveTerm = k1 * max(radiusSum-distance, 0) * unitVector;
@@ -213,22 +236,22 @@ classdef Minnow < handle
             
             % Find the closest x and y limits
             
-            if abs(obj.xLimits(1) - obj.position(1)) > abs(obj.xLimits(2) - obj.position(1))
+            if abs(obj.xLimits(1) - obj.currentPosition(1)) > abs(obj.xLimits(2) - obj.currentPosition(1))
                 closeXLimit = obj.xLimits(2);
             else
                 closeXLimit = obj.xLimits(1);
             end
             
-            if abs(obj.yLimits(1) - obj.position(2)) > abs(obj.yLimits(2) - obj.position(2))
+            if abs(obj.yLimits(1) - obj.currentPosition(2)) > abs(obj.yLimits(2) - obj.currentPosition(2))
                 closeYLimit = obj.yLimits(2);
             else
                 closeYLimit = obj.yLimits(1);
             end
             
             % Figure out the force for each the two closest walls
-            distance = norm(obj.position(1)-[closeXLimit,closeYLimit]);
-            unitVector = (obj.position-[closeXLimit,closeYLimit])/distance;
-            velocityDifference = -obj.position;
+            distance = norm(obj.currentPosition(1)-[closeXLimit,closeYLimit]);
+            unitVector = (obj.currentPosition-[closeXLimit,closeYLimit])/distance;
+            velocityDifference = -obj.currentPosition;
             perpVelDiff = -unitVector(2)*velocityDifference(1) + unitVector(1)*velocityDifference(2);
             repulsiveTerm = A * exp((obj.radius-distance)/B) * unitVector;
             compressiveTerm = k1 * max(obj.radius-distance, 0) * unitVector;

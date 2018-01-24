@@ -6,7 +6,7 @@ classdef Shark < handle
         position
         velocity
         speed
-        range
+        radius
         historicalPosition
         direction
         xLimits
@@ -19,12 +19,12 @@ classdef Shark < handle
     end
     
     methods
-        function obj = Shark(pos, speed, range, startingDirection, xLimits, yLimits, ID)
+        function obj = Shark(pos, speed, radius, startingDirection, xLimits, yLimits, ID)
             % This is the constructor for the shark
             obj.position = pos; % set the agent's new position
             obj.velocity = [0, 0]; % start the agent at zero velocity
             obj.speed = speed; % set the agent's max speed
-            obj.range = range; % How close the shark needs to be to catch a minnow
+            obj.radius = radius; % How close the shark needs to be to catch a minnow
             obj.historicalPosition = []; % Create this for future use
             obj.direction = startingDirection; % objects [xDirection, yDirection]
             obj.xLimits = xLimits;
@@ -108,7 +108,7 @@ classdef Shark < handle
                 if minnowList(i).finished == 0
                     % Make a list of minnows who aren't caught or to the
                     % other side and calculate their distance
-                    distance = sqrt((obj.position(1) - minnowList(i).position(1))^2 + (obj.position(2) - minnowList(i).position(2))^2);
+                    distance = sqrt((obj.position(1) - minnowList(i).currentPosition(1))^2 + (obj.position(2) - minnowList(i).currentPosition(2))^2);
                     minnowStats = [minnowStats;distance,i];
                 end
             end
@@ -131,7 +131,7 @@ classdef Shark < handle
             for jj=1:size(minnowStats,1)
                 % This loop will calculate the time to interception for the
                 % 5 closest minnows.
-                distanceVector = obj.position - minnowList(minnowStats(jj,2)).position;
+                distanceVector = obj.position - minnowList(minnowStats(jj,2)).currentPosition;
                 distance = norm(distanceVector);
                 
                 % quadratic coefficients
@@ -181,7 +181,7 @@ classdef Shark < handle
         
         function obj = pursueBasic(obj, minnow, minnowList)
             %% This method pursues a minnow and marks them as caught if they 
-            % get within the shark's range
+            % get within the shark's radius
             
             % Stop the loop immediately if all minnows have been caught
             if obj.allCaught == 1
@@ -239,7 +239,7 @@ classdef Shark < handle
             % Update the list of positions
             obj.historicalPosition = [obj.historicalPosition;obj.position];
             
-            % Check to see if any minnows are within the shark's range
+            % Check to see if any minnows are within the shark's radius
             
             % minnowStats is a list which will hold the distance, the
             % minnows number, and if it's been caught
@@ -259,7 +259,7 @@ classdef Shark < handle
             end
 
             for ii=1:length(minnowStats)
-                if minnowStats(ii,1) <= obj.range
+                if minnowStats(ii,1) <= obj.radius
                     minnowList(ii).finished = 1;
                     minnowList(ii).finishedStep = obj.steps;
                     fprintf('Minnow %i caught on step %i by shark %i.\n', ii, obj.steps, obj.ID)
@@ -286,7 +286,7 @@ classdef Shark < handle
                 return
             end
             
-            distanceVector = obj.position - minnow.position;
+            distanceVector = obj.position - minnow.currentPosition;
             distance = norm(distanceVector);
             
             % quadratic coefficients
@@ -323,7 +323,7 @@ classdef Shark < handle
                 tFinal = max(t1, t2);
             end
             
-            interceptionPoint = minnow.position + minnow.velocity * tFinal;
+            interceptionPoint = minnow.currentPosition + minnow.velocity * tFinal;
 
             obj.velocity = (interceptionPoint - obj.position) / tFinal;
             
@@ -336,13 +336,13 @@ classdef Shark < handle
             
             if isnan(obj.velocity(1)) == 1
                 obj.markedMinnow = 0;
-                obj.chooseMinnow(minnowList);
+                obj.chooseMinnow2(minnowList);
             end
             
             % Update the list of positions
             obj.historicalPosition = [obj.historicalPosition;obj.position];
             
-            % Check to see if any minnows are within the shark's range
+            % Check to see if any minnows are within the shark's radius
             
             % minnowStats is a list which will hold the distance, the
             % minnows number, and if it's been caught
@@ -355,14 +355,14 @@ classdef Shark < handle
                     distance = obj.maxDistance;
                 else
                     % standard distance formula
-                    distance = sqrt((obj.position(1) - minnowList(i).position(1))^2 + (obj.position(2) - minnowList(i).position(2))^2);
+                    distance = sqrt((obj.position(1) - minnowList(i).currentPosition(1))^2 + (obj.position(2) - minnowList(i).currentPosition(2))^2);
                 end
                 % put the distance in the minnowStats list
                 minnowStats = [minnowStats;distance,i];
             end
 
             for ii=1:length(minnowStats)
-                if minnowStats(ii,1) <= obj.range
+                if minnowStats(ii,1) <= obj.radius
                     minnowList(ii).finished = 1;
                     minnowList(ii).finishedStep = obj.steps;
                     fprintf('Minnow %i caught on step %i by shark %i.\n', ii, obj.steps, obj.ID)

@@ -8,13 +8,13 @@ sharkRange = 2;
 n = 100;
 startingDirection = [1, 0];
 
-minnowOne = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1, 1);
-minnowTwo = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 0.1, 2);
-minnowThree = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, .1, 3);
-minnowFour = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1, 4);
-minnowFive = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1, 5);
-minnowSix = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1, 6);
-minnowSeven = Minnow([0, randi([1 40],1)], minnowSpeed, startingDirection, xLimits, yLimits, 1, 7);
+minnowOne = Minnow([0, 1], minnowSpeed, startingDirection, xLimits, yLimits, 1, 1);
+minnowTwo = Minnow([0, 2], minnowSpeed, startingDirection, xLimits, yLimits, 0.1, 2);
+minnowThree = Minnow([0, 5], minnowSpeed, startingDirection, xLimits, yLimits, .1, 3);
+minnowFour = Minnow([0, 7], minnowSpeed, startingDirection, xLimits, yLimits, 1, 4);
+minnowFive = Minnow([0, 9], minnowSpeed, startingDirection, xLimits, yLimits, 1, 5);
+minnowSix = Minnow([0, 11], minnowSpeed, startingDirection, xLimits, yLimits, 1, 6);
+minnowSeven = Minnow([0, 13], minnowSpeed, startingDirection, xLimits, yLimits, 1, 7);
 
 minnowList = [minnowOne, minnowTwo, minnowThree, minnowFour, minnowFive, minnowSix, minnowSeven];
 
@@ -23,11 +23,20 @@ sharkTwo = Shark([40, randi([15 30],1)], sharkSpeed, sharkRange, [-1,0], xLimits
 % sharkThree = Shark([40, randi([30 40],1)], sharkSpeed, sharkRange, [-1,0], xLimits, yLimits, 3);
 sharkList = [sharkOne, sharkTwo];
 
-for i=1:n
+for i=1:1
     for j=1:length(minnowList)
-        % Make all of the minnows move
+        % compute the forces for all of the minnows and where they should
+        % move next
         minnowList(j).steps = minnowList(j).steps + 1;
-        minnowList(j).randomStep();
+        minnowList(j).socialForceStep(minnowList, sharkList);
+    end
+    
+    for jj=1:length(minnowList)
+        % This is seperate from the previous loop so that the minnows can
+        % all have their forces from the same position. If it was in the
+        % same one minnow two would be acted on by minnow one after minnow
+        % one had already moved, which would put it at a disadvantage.
+        minnowList(jj).currentPosition = minnowList(jj).nextPosition;
     end
     
     for ii=1:length(sharkList)
