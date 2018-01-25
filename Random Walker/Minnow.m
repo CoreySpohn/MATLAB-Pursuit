@@ -118,18 +118,16 @@ classdef Minnow < handle
             obj.historicalPosition = [obj.historicalPosition;obj.currentPosition];
         end
         
-        
-        
         %% These functions are for the social force evasion model
         function obj = socialForceStep(obj, minnowList, sharkList)
             % This function will call the force functions and use their
             % outputs to move the minnow
             obj.minnowGoalForce();
             obj.minnowToMinnowForce(minnowList);
-%             obj.sharkToMinnowForce(sharkList);
+            obj.sharkToMinnowForce(sharkList);
 %             obj.obstacleToMinnowForce();
 %             obj.totalForce = obj.minnowsForce + obj.sharksForce + obj.wallsForce;
-            obj.totalForce = obj.minnowsForce;
+            obj.totalForce = obj.minnowsForce + obj.goalForce + obj.sharksForce;
             acceleration = obj.totalForce / obj.mass;
             obj.velocity = obj.velocity + acceleration*obj.timeInterval;
             obj.nextPosition = obj.currentPosition + obj.velocity*obj.timeInterval;
@@ -186,7 +184,7 @@ classdef Minnow < handle
                     repulsiveTerm = A * exp((radiusSum-distance)/B) * unitVector;
                     compressiveTerm = k1 * max(radiusSum-distance, 0) * unitVector;
                     frictionTerm = k2 * max(radiusSum-distance, 0) * unitVector * perpVelDiff;
-                    summedForce = summedForce + repulsiveTerm + compressiveTerm + frictionTerm
+                    summedForce = summedForce + repulsiveTerm + compressiveTerm + frictionTerm;
 %                     fprintf('Minnow %i acting on minnow %i is: %i\n', i, obj.ID, summedForce)
                 end
                 % It's worth mentioning that you could make this a lot

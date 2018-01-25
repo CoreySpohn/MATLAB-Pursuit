@@ -9,7 +9,7 @@ n = 100;
 startingDirection = [1, 0];
 
 minnowOne = Minnow([0, 1], minnowSpeed, startingDirection, xLimits, yLimits, 1, 1);
-minnowTwo = Minnow([0, 2], minnowSpeed, startingDirection, xLimits, yLimits, 0.1, 2);
+minnowTwo = Minnow([0, 1.1], minnowSpeed, startingDirection, xLimits, yLimits, 0.1, 2);
 minnowThree = Minnow([0, 5], minnowSpeed, startingDirection, xLimits, yLimits, .1, 3);
 minnowFour = Minnow([0, 7], minnowSpeed, startingDirection, xLimits, yLimits, 1, 4);
 minnowFive = Minnow([0, 9], minnowSpeed, startingDirection, xLimits, yLimits, 1, 5);
@@ -23,7 +23,7 @@ sharkTwo = Shark([40, randi([15 30],1)], sharkSpeed, sharkRange, [-1,0], xLimits
 % sharkThree = Shark([40, randi([30 40],1)], sharkSpeed, sharkRange, [-1,0], xLimits, yLimits, 3);
 sharkList = [sharkOne, sharkTwo];
 
-for i=1:1
+for i=1:15
     for j=1:length(minnowList)
         % compute the forces for all of the minnows and where they should
         % move next
@@ -98,7 +98,7 @@ for ii=1:min(length(sharkList(1).historicalPosition),length(sharkList(2).histori
     title(ii)
     xlim(xLimits)
     ylim(yLimits)
-    pause(0.05)
+    pause(0.15)
     
     % Saves all of the figures so that they can be used for video making
     if ii < 10
