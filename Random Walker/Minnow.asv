@@ -32,7 +32,7 @@ classdef Minnow < handle
             obj.currentPosition = pos; % set the minnow's new position
             obj.velocity = [0, 0]; % start the minnow at zero velocity
             obj.speed = speed; % set the minnow's max speed
-            obj.historicalPosition = [pos]; % Create this for future use
+            obj.historicalPosition = []; % Create this for future use
             obj.direction = startingDirection; % objects [xDirection, yDirection]
             obj.xLimits = xLimits;
             obj.yLimits = yLimits;
@@ -132,17 +132,12 @@ classdef Minnow < handle
             obj.minnowGoalForce();
             obj.minnowToMinnowForce(minnowList);
             obj.sharkToMinnowForce(sharkList);
-%             obj.obstacleToMinnowForce();
-            obj.totalForce = obj.minnowsForce + obj.goalForce + obj.sharksForce;
+            obj.obstacleToMinnowForce();
+            obj.totalForce = obj.minnowsForce + obj.goalForce + obj.sharksForce + obj.wallsForce;
             forceUnitVector = obj.totalForce / norm(obj.totalForce);
             obj.nextPosition = obj.currentPosition + obj.speed*forceUnitVector;
-            
-            step = obj.steps;
-            while isnan(obj.nextPosition) == 1
-                % I've got a bug and I'm doing a quick fix that I'll
-                % probably not fix fully
-                obj.nextPosition = obj.historicalPosition(step,:);
-                step = step - 1;
+            if isnan(obj.nextPosition) == 1
+                while
             end
             
 %             acceleration = obj.totalForce / obj.mass;
@@ -153,15 +148,12 @@ classdef Minnow < handle
             % play
             if obj.nextPosition(1) < obj.xLimits(1)
                 obj.nextPosition(1) = obj.xLimits(1);
-                obj.nextPosition(2) = obj.currentPosition(2) + obj.speed;
             end
             
             if obj.nextPosition(2) < obj.yLimits(1)
                 obj.nextPosition(2) = obj.yLimits(1);
-                obj.nextPosition(1) = obj.currentPosition(1) + obj.speed;
             elseif obj.nextPosition(2) > obj.yLimits(2)
                 obj.nextPosition(2) = obj.yLimits(2);
-                obj.nextPosition(1) = obj.currentPosition(1) + obj.speed;
             end
             
             if obj.nextPosition(1) >= abs(obj.xLimits(2)-0.5)
@@ -202,12 +194,9 @@ classdef Minnow < handle
                     velocityDifference = minnowList(i).currentPosition-obj.currentPosition;
                     perpVelDiff = -unitVector(2)*velocityDifference(1) + unitVector(1)*velocityDifference(2);
                     repulsiveTerm = A * exp((radiusSum-distance)/B) * unitVector;
-                    if isnan(repulsiveTerm) == 1
-                        repulsiveTerm = [0, 0];
-                    end
-%                     compressiveTerm = k1 * max(radiusSum-distance, 0) * unitVector;
-%                     frictionTerm = k2 * max(radiusSum-distance, 0) * unitVector * perpVelDiff;
-                    summedForce = summedForce + repulsiveTerm;
+                    compressiveTerm = k1 * max(radiusSum-distance, 0) * unitVector;
+                    frictionTerm = k2 * max(radiusSum-distance, 0) * unitVector * perpVelDiff;
+                    summedForce = summedForce + repulsiveTerm + compressiveTerm + frictionTerm;
 %                     fprintf('Minnow %i acting on minnow %i is: %i\n', i, obj.ID, summedForce)
                 end
                 % It's worth mentioning that you could make this a lot
@@ -237,7 +226,7 @@ classdef Minnow < handle
                     distance = norm(obj.currentPosition-sharkList(i).position);
                     unitVector = (obj.currentPosition-sharkList(i).position)/distance;
                     repulsiveTermExp = exp((radiusSum-distance)) * unitVector;
-                    repulsiveTermStatic = 8e6 * unitVector;
+                    repulsiveTermStatic = 5e6 * unitVector;
                     repulsiveTerm = max(repulsiveTermExp, repulsiveTermStatic);
                     summedForce = summedForce + repulsiveTerm;
                 end

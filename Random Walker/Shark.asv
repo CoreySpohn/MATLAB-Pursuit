@@ -329,7 +329,7 @@ classdef Shark < handle
 
             obj.velocity = (interceptionPoint - obj.position) / tFinal;
             
-            obj.velocity = obj.velocity * obj.speed / norm(obj.velocity);
+            
             
             if (obj.xLimits(1) <= obj.position(1) + obj.velocity(1) && obj.position(1) + obj.velocity(1) <= obj.xLimits(2))
                 obj.position(1) = obj.position(1) + obj.velocity(1);

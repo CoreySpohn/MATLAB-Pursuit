@@ -18,10 +18,11 @@ classdef Robot < handle
         allCaught
         steps
         maxDistance
+        name
     end
     
     methods
-        function obj = Robot(ID, role, pos, speed, range, xLimits, yLimits)
+        function obj = Robot(ID, role, pos, speed, range, xLimits, yLimits, name)
             % This is the constructor for the shark
             obj.ID = ID; % Robot's ID number
             obj.role = role; % Whether the robot is a shark or minnow
@@ -37,6 +38,7 @@ classdef Robot < handle
             obj.steps = 0; % Number of steps that the shark has taken
             obj.maxDistance = sqrt(max(xLimits(1),xLimits(2))^2 + max(yLimits(1),yLimits(2))^2);
             obj.time = 0; % start the time at 0
+            obj.name = name; % Name on the hat
         end
         
         function obj = newData(obj, motionData)
@@ -201,21 +203,11 @@ classdef Robot < handle
 
             obj.velocity = (interceptionPoint - obj.position) / tFinal;
             
-            if (obj.xLimits(1) <= obj.position(1) + obj.velocity(1) && obj.position(1) + obj.velocity(1) <= obj.xLimits(2))
-                obj.position(1) = obj.position(1) + obj.velocity(1);
-            end
-            if (obj.yLimits(1) <= obj.position(2) + obj.velocity(2) && obj.position(2) + obj.velocity(2) <= obj.yLimits(2));
-                obj.position(2) = obj.position(2) + obj.velocity(2);
-            end
-            
             if isnan(obj.velocity(1)) == 1
                 obj.markedMinnow = 0;
                 obj.chooseMinnow(minnowList);
             end
-            
-            % Update the list of positions
-            obj.historicalPosition = [obj.historicalPosition;obj.position];
-            
+
             % Check to see if any minnows are within the shark's range
             
             % minnowStats is a list which will hold the distance, the

@@ -45,7 +45,7 @@ classdef Robot < handle
             if isempty(obj.historicalPosition) == 1
                 obj.historicalPosition = [obj.position];
             else
-                
+                obj.historicalPosition = [obj.historicalPosition; obj.position];
             end
             
         end
@@ -200,13 +200,6 @@ classdef Robot < handle
             interceptionPoint = minnow.position + minnow.velocity * tFinal;
 
             obj.velocity = (interceptionPoint - obj.position) / tFinal;
-            
-            if (obj.xLimits(1) <= obj.position(1) + obj.velocity(1) && obj.position(1) + obj.velocity(1) <= obj.xLimits(2))
-                obj.position(1) = obj.position(1) + obj.velocity(1);
-            end
-            if (obj.yLimits(1) <= obj.position(2) + obj.velocity(2) && obj.position(2) + obj.velocity(2) <= obj.yLimits(2));
-                obj.position(2) = obj.position(2) + obj.velocity(2);
-            end
             
             if isnan(obj.velocity(1)) == 1
                 obj.markedMinnow = 0;
