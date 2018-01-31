@@ -18,7 +18,7 @@ classdef Human < handle
             obj.ID = ID; % The minnows number or ID
             obj.role = role; % Indicates whether the human is a shark or minnow
             obj.historicalPosition = [];
-            obj.time = 0; % Initialize time to 0
+            obj.time = 0.05; % Initialize time to 0
             obj.velocity = [0, 0]; % start the minnow at zero velocity
             obj.speed = 0; % set the minnow's max speed
             obj.finished = 0; % This will serve to tell whether the minnow has been caught or reached the other side
@@ -63,13 +63,13 @@ classdef Human < handle
             % Get the velocity between n points
             if size(obj.position, 1) > n
                 % Use this when there are more points than n
-                vx = (obj.position(size(obj.position, 1), 1)-obj.position(size(obj.position, 1)-n, 1))/t;
-                vy = (obj.position(size(obj.position, 1), 2)-obj.position(size(obj.position, 1)-n, 2))/t;
+                vx = (obj.position(size(obj.position, 1), 1)-obj.position(size(obj.position, 1)-n, 1))/obj.time;
+                vy = (obj.position(size(obj.position, 1), 2)-obj.position(size(obj.position, 1)-n, 2))/obj.time;
             else
                 % Use this until there are more points than n, so that you
                 % don't have an index error for the first few points
-                vx = (obj.position(size(obj.position, 1), 1)-obj.position(1, 1))/t; % Most recent x value - initial x value
-                vy = (obj.position(size(obj.position, 1), 2)-obj.position(1, 2))/t; % 
+                vx = (obj.position(size(obj.position, 1), 1)-obj.position(1, 1))/obj.time; % Most recent x value - initial x value
+                vy = (obj.position(size(obj.position, 1), 2)-obj.position(1, 2))/obj.time; % 
             end
             
             obj.velocity = [vx, vy];

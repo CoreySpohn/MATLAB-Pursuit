@@ -13,21 +13,27 @@ classdef Robot < handle
         yLimits
         ID
         role
-        time
+        timeInterval
         markedMinnow
         allCaught
         steps
         maxDistance
+        name
+        mass
+        goalForce
+        minnowsForce
+        wallsForce
+        sharksForce
+        totalForce
     end
     
     methods
-        function obj = Robot(ID, role, pos, speed, range, xLimits, yLimits)
+        function obj = Robot(ID, role, speed, range, xLimits, yLimits, name)
             % This is the constructor for the shark
             obj.ID = ID; % Robot's ID number
             obj.role = role; % Whether the robot is a shark or minnow
-            obj.position = pos; % set the agent's new position
             obj.velocity = [0, 0]; % start the agent at zero velocity
-            obj.speed = speed; % set the agent's max speed
+            obj.speed = speed; % set the agent's max speed in ~mm/s
             obj.range = range; % How close the shark needs to be to catch a minnow
             obj.historicalPosition = []; % Create this for future use
             obj.xLimits = xLimits;
@@ -36,7 +42,9 @@ classdef Robot < handle
             obj.allCaught = 0; % When this is a 1 it means that all of the minnows have been caught
             obj.steps = 0; % Number of steps that the shark has taken
             obj.maxDistance = sqrt(max(xLimits(1),xLimits(2))^2 + max(yLimits(1),yLimits(2))^2);
-            obj.time = 0; % start the time at 0
+            obj.time = 0.05; % start the time at 0
+            obj.name = name; % Name on the hat
+            obj.mass = 1;
         end
         
         function obj = newData(obj, motionData)
@@ -205,10 +213,7 @@ classdef Robot < handle
                 obj.markedMinnow = 0;
                 obj.chooseMinnow(minnowList);
             end
-            
-            % Update the list of positions
-            obj.historicalPosition = [obj.historicalPosition;obj.position];
-            
+
             % Check to see if any minnows are within the shark's range
             
             % minnowStats is a list which will hold the distance, the
@@ -272,7 +277,7 @@ classdef Robot < handle
             obj.historicalPosition = [obj.historicalPosition;obj.nextPosition];
         end
         
-        function obj = minnowGoalForce(obj)
+        function obj = minnowGoalForce(obj, roundNum)
             % This function will generate a force in the x direction that
             % faces towards the finish line. For the current simulations it
             % only needs to be in the positive x direction
@@ -287,7 +292,7 @@ classdef Robot < handle
             end
             
             goalVelocity = obj.speed*goalVector;
-            obj.goalForce = obj.mass*c*(goalVelocity)/obj.timeInterval;
+            obj.goalForce = obj.mass*c*(goalVelocity)/obj.time;
         end
         
         function obj = minnowToMinnowForce(obj, minnowList)

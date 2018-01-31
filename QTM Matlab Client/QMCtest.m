@@ -1,4 +1,4 @@
-qtm=QMC('QMC_conf.txt');
+qtm=QMC('QMC_conf_6.txt');
 
 timeIncrement = .01;  % Number of seconds between measurements
 seconds = 180;  % Length of trial in seconds

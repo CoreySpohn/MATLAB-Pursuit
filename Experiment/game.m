@@ -2,7 +2,35 @@
 
 % Important constants
 qtm=QMC('QMC_conf.txt');
-timeIncrement = .01;  % Number of seconds between measurements
+
+
+% timeIncrement = .01;  % Number of seconds between measurements
+% seconds = 60;  % Length of trial in seconds
+% fullData = [];
+% for i=1:seconds/timeIncrement
+%     [data3DOF data6DOF] = QMC(qtm, 'frameinfo');
+%     data6DOF;  % Print the 6 degree of freedom data
+%     fullData = [fullData;data6DOF]; % Make a giant array with all of the data
+%     pause(timeIncrement)  % Wait the indicated period of time until the next measurement
+% end
+% pause(10)
+
+%% xBee stuff
+% try
+%     fclose(xBee);
+%     delete(xBee);
+%     clear xBee;
+%     fprintf('Old MATLAB serial port needed to be closed first\n');
+% catch
+% end
+% 
+% try
+%     xBee = serial('COM4', 'BaudRate', 9600, 'Parity', 'none', 'DataBits', 8);
+%     fopen(xBee);
+%     fprintf('Matlab serial port was created\n');
+% catch
+%     fprintf('Matlab serial port failed to be created.\n');
+% end
 
 gameBoundariesX = [-5000, 5000];
 gameBoundariesY = [-5000, 5000];
@@ -11,39 +39,46 @@ gameName = 'temp'; % use for filename output
 
 %% Human Initialization
 % Human(ID, role, pos, name)
-blueWhale = Human(1, 'Minnow', [0,0], 'Blue Whale');
-tiger = Human(2, 'Minnow', [1.5,0], 'Tiger');
-howlerMonkey = Human(3, 'Minnow', [3,0], 'Howler Monkey');
+blueWhale = Human(1, 'Minnow', 'Blue Whale');
+chimpanzee = Human(2, 'Minnow', 'Chimpanzee');
+tiger = Human(3, 'Minnow', 'Tiger');
+cat = Human(4, 'Minnow', 'Cat');
+lion = Human(5, 'Minnow', 'Lion');
+seal = Human(6, 'Minnow', 'Seal');
+squirrel = Human(7, 'Minnow', 'Squirrel');
+gorilla = Human(8, 'Minnow', 'Gorilla');
 
-humanList = [blueWhale, tiger, howlerMonkey];
+humanList = [blueWhale, chimpanzee, tiger, cat, lion, seal, squirrel, gorilla];
 
 %% Robot initialization
-% Robot(ID, role, pos, speed, range, xLimits, yLimits, name)
-cat = Robot(1, 'Minnow', [0,0], 1, 1.5, gameBoundariesX, gameBoundariesY, 'Cat');
+% Robot(ID, role, speed, range, xLimits, yLimits, name)
+skunk = Robot(9, 'Minnow', 750, 1.5, gameBoundariesX, gameBoundariesY, 'Skunk');
+germanShepherd = Robot(10, 'Minnow', 750, 1.5, gameBoundariesX, gameBoundariesY, 'German Shepherd');
+horse = Robot(11, 'Minnow', 750, 1.5, gameBoundariesX, gameBoundariesY, 'Horse');
 
-robotList = [cat];
+robotList = [skunk, germanShepherd, horse];
 
 %% GAME START
-numOfRounds = 4;
+numOfRounds = 3;
 
 % Automatically generate lists to keep track of the sharks vs the minnows
 sharkList = [];
 minnowList = [];
-for i=1:length(robotList)
-    if strcmp(robotList(i).role, 'Shark')
-        append(sharkList, robotList(i));
-    else
-        append(minnow, robotList(i));
-    end
-end
-
-for i=1:length(humanList)
-    if strcmp(humanList(i).role, 'Shark')
-        append(sharkList, humanList(i));
-    else
-        append(minnowList, humanList(i));
-    end
-end
+% for i=1:length(robotList)
+%     if strcmp(robotList(i).role, 'Shark')
+%         sharkList = [sharkList, robotList(i)];
+%     else
+%         minnowList = [minnowList, robotList(i)];
+%     end
+% end
+% 
+% for i=1:length(humanList)
+%     if strcmp(humanList(i).role, 'Shark')
+%         sharkList = [sharkList, humanList(i)];
+%     else
+%         minnowList = [minnowList, humanList(i)];
+%     end
+% end
 
 
 % This loop encompasses the entire game, the basics are each game has a set
@@ -62,7 +97,8 @@ for currentRound = 1:numOfRounds
     end
     
     
-    while allFinished == 0;
+    while allFinished == 0
+        
         % Get data from QTM
         [data3DOF, data6DOF] = QMC(qtm, 'frameinfo');
         
@@ -70,48 +106,67 @@ for currentRound = 1:numOfRounds
         for i=1:length(humanList)
             % Note that this also checks to see if they are a minnow and
             % have finished
-            humanList(i).newData(data6DOF, goalPoint)
+            humanList(i).newData(data6DOF, goalPoint);
         end
         
         % Update the position of all robots
         for i=1:length(robotList)
-            robotList(i).newData(data6DOF)
+            robotList(i).newData(data6DOF);
         end
         
         % Determine the appropriate velocities for each of the robots, save
         % them in the object classes to send over xBee
         for i=1:length(robotList)
             if strcmp(robotList(i).role, 'Minnow') == 1
-                robotList(i).minnowMove(minnowList, sharkList, roundNum)
+                robotList(i).minnowMove(minnowList, sharkList, currentRound);
             elseif strcmp(robotList(i).role, 'Shark') == 1
-                robotList(i).sharkMove(minnowList)
+                robotList(i).sharkMove(minnowList);
             else
                 error('lol you misspelled something')
             end
         end
         
         % Check to see if any of the minnows were caught
-        for i=1:length(sharkList)
-            for j=1:length(minnowList)
-                if minnowList(j).finished == 0
-                    % For minnows that aren't finished check
-                    distance = norm(sharkList(i).position-minnowList(j).position);
-                    if distance <= sharkList(i).range
-                        minnowList(j).finished = 1;
-                        fprintf('%s was caught by %s', minnowList(j).name, sharkList(j).name)
-                    end
-                end
-            end
-        end
+%         for i=1:length(sharkList)
+%             for j=1:length(minnowList)
+%                 if minnowList(j).finished == 0
+%                     % For minnows that aren't finished check
+%                     distance = norm(sharkList(i).position-minnowList(j).position);
+%                     if distance <= sharkList(i).range
+%                         minnowList(j).finished = 1;
+%                         fprintf('%s was caught by %s', minnowList(j).name, sharkList(j).name)
+%                     end
+%                 end
+%             end
+%         end
         
         % Send the data
-        velocityString = [];
+        velocities = [];
         for i=1:length(robotList)
-            velocityString = [velocityString, i, robotList(i).velocity];
+            velocities = [velocities; robotList(i).velocity];
+        end
+        fprintf('again')
+        if isempty(robotList) == 0
+           break
+        elseif length(robotList) == 1
+            velocityString = num2str(velocities(1,1)) + ' ' + num2str(velocities(1,2));
+            fprintf(xBee,'%s',velocityString);
+        elseif length(robotList) == 2
+            velocityString = num2str(velocities(1,1)) + ' ' + num2str(velocities(1,2)) + 'robot2' + num2str(velocities(2,1)) + ' ' + num2str(velocities(2,1));
+            fprintf(xBee,'%s',velocityString);
+        elseif length(robotList) == 3
+            velocityString = num2str(velocities(1,1)) + ' ' + num2str(velocities(1,2)) + ' robot2' + num2str(velocities(2,1)) + ' ' + num2str(velocities(2,1)) + ' robot3' + num2str(velocities(3,1)) + ' ' + num2str(velocities(3,1));
+            fprintf(xBee,'%s',velocityString);
         end
         
-        
     end
-    
 end
 
+%close serial port
+% fclose(xBee);
+% delete(xBee);
+% clear arduino;
+% fprintf('Matlab serial port was closed\n');
+% fprintf('END\n');
+
+QMC(qtm,'disconnect')

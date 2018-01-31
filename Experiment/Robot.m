@@ -13,22 +13,28 @@ classdef Robot < handle
         yLimits
         ID
         role
-        time
+        timeInterval
         markedMinnow
         allCaught
         steps
         maxDistance
         name
+        mass
+        goalForce
+        minnowsForce
+        wallsForce
+        sharksForce
+        totalForce
+        radius
     end
     
     methods
-        function obj = Robot(ID, role, pos, speed, range, xLimits, yLimits, name)
+        function obj = Robot(ID, role, speed, range, xLimits, yLimits, name)
             % This is the constructor for the shark
             obj.ID = ID; % Robot's ID number
             obj.role = role; % Whether the robot is a shark or minnow
-            obj.position = pos; % set the agent's new position
             obj.velocity = [0, 0]; % start the agent at zero velocity
-            obj.speed = speed; % set the agent's max speed
+            obj.speed = speed; % set the agent's max speed in ~mm/s
             obj.range = range; % How close the shark needs to be to catch a minnow
             obj.historicalPosition = []; % Create this for future use
             obj.xLimits = xLimits;
@@ -37,8 +43,10 @@ classdef Robot < handle
             obj.allCaught = 0; % When this is a 1 it means that all of the minnows have been caught
             obj.steps = 0; % Number of steps that the shark has taken
             obj.maxDistance = sqrt(max(xLimits(1),xLimits(2))^2 + max(yLimits(1),yLimits(2))^2);
-            obj.time = 0; % start the time at 0
+            obj.timeInterval = 0.05; % start the time at 0
             obj.name = name; % Name on the hat
+            obj.mass = 1;
+            obj.radius = 1;
         end
         
         function obj = newData(obj, motionData)
@@ -249,29 +257,10 @@ classdef Robot < handle
             obj.totalForce = obj.minnowsForce + obj.goalForce + obj.sharksForce;
             acceleration = obj.totalForce / obj.mass;
             obj.velocity = obj.velocity + acceleration*obj.timeInterval;
-            obj.nextPosition = obj.currentPosition + obj.velocity*obj.timeInterval;
-            
-            % Make sure that the minnow doesn't get to leave the field of
-            % play
-            if obj.nextPosition(1) < obj.xLimits(1)
-                obj.nextPosition(1) = obj.xLimits(1);
-            end
-            
-            if obj.nextPosition(2) < obj.yLimits(1)
-                obj.nextPosition(2) = obj.yLimits(1);
-            elseif obj.nextPosition(2) > obj.yLimits(2)
-                obj.nextPosition(2) = obj.yLimits(2);
-            end
-            
-            if obj.nextPosition(1) >= abs(obj.xLimits(2)-0.5)
-                fprintf('Minnow %i wins on step %i.\n', obj.ID, obj.steps)
-                obj.finished = 1;
-            end
-            
-            obj.historicalPosition = [obj.historicalPosition;obj.nextPosition];
+            obj.historicalPosition = [obj.historicalPosition;obj.position];
         end
         
-        function obj = minnowGoalForce(obj)
+        function obj = minnowGoalForce(obj, roundNum)
             % This function will generate a force in the x direction that
             % faces towards the finish line. For the current simulations it
             % only needs to be in the positive x direction
@@ -374,9 +363,9 @@ classdef Robot < handle
             end
             
             % Figure out the force for each the two closest walls
-            distance = norm(obj.currentPosition(1)-[closeXLimit,closeYLimit]);
-            unitVector = (obj.currentPosition-[closeXLimit,closeYLimit])/distance;
-            velocityDifference = -obj.currentPosition;
+            distance = norm(obj.position(1)-[closeXLimit,closeYLimit]);
+            unitVector = (obj.position-[closeXLimit,closeYLimit])/distance;
+            velocityDifference = -obj.position;
             perpVelDiff = -unitVector(2)*velocityDifference(1) + unitVector(1)*velocityDifference(2);
             repulsiveTerm = A * exp((obj.radius-distance)/B) * unitVector;
             compressiveTerm = k1 * max(obj.radius-distance, 0) * unitVector;
