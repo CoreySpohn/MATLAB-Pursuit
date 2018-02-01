@@ -9,7 +9,7 @@ seconds = 60;
 sharkRange = 300;
 
 %% xBee stuff
-%{
+
 try
     fclose(xBee);
     delete(xBee);
@@ -30,7 +30,7 @@ for i=1:seconds/timeIncrement
     fullData = [fullData;data6DOF]; % Make a giant array with all of the data
     pause(timeIncrement)  % Wait the indicated period of time until the next measurement
 end
-%}
+
 
 gameBoundariesX = [-3.8e03, 3e03];
 gameBoundariesY = [-3.3e03, 2e03];
