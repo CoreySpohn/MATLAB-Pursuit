@@ -1,0 +1,19 @@
+blueWhale - 1
+chimpanzee - 2
+tiger - 3
+cat - 4
+lion - 5
+seal - 6
+squirrel - 7
+gorilla - 8
+skunk - 9 
+germanShepherd - 10
+horse - 11
+giraffe - 12
+otter - 13
+
+Sharks always horse, giraffe, or otter
+
+When Robots are minnows they are skunk and germanShepherd
+
+blueWhale.historicalPo120sition, chimpanzee.historicalPosition, tiger.historicalPosition, cat.historicalPosition, lion.historicalPosition, seal.historicalPosition, squirrel.historicalPosition, gorilla.historicalPosition, skunk.historicalPosition, germanShepherd.historicalPosition, horse.historicalPosition, giraffe.historicalPosition, otter.historicalPosition;
