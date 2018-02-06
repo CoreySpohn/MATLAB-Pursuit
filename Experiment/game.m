@@ -9,6 +9,7 @@ seconds = 60;
 sharkRange = 300;
 
 %% xBee stuff
+
 %{
 try
     fclose(xBee);
@@ -35,7 +36,7 @@ end
 gameBoundariesX = [-3.8e03, 3e03];
 gameBoundariesY = [-3.3e03, 2e03];
 
-trial = 3;
+trial = 4;
 replicate = 1;
 gameName = "trial" + int2str(trial) + "rep" + int2str(replicate); % use for filename output
 

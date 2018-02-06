@@ -285,14 +285,10 @@ classdef Robot < handle
             % only needs to be in the positive x direction
             c = 0.1; % this variable can be adjusted to give this force more influence if necessary
             
-            if mod(roundNum, 2) == 1
-                % If it's an odd round number then the robot should try to
-                % move in the positive x direction
-                goalVector = [1,0];
-            else
-                goalVector = [-1,0];
-            end
-            
+
+            % If it's an odd round number then the robot should try to
+            % move in the positive x direction
+            goalVector = [1,0];
             goalVelocity = obj.speed*goalVector;
             obj.goalForce = obj.mass*c*(goalVelocity)/obj.timeInterval;
         end
@@ -369,7 +365,7 @@ classdef Robot < handle
             
             % Find the closest x and y limits
             
-            if abs(obj.xLimits(1) - obj.currentPosition(1)) > abs(obj.xLimits(2) - obj.currentPosition(1))
+            if abs(obj.xLimits(1) - obj.position(1)) > abs(obj.xLimits(2) - obj.currentPosition(1))
                 closeXLimit = obj.xLimits(2);
             else
                 closeXLimit = obj.xLimits(1);

@@ -22,20 +22,20 @@ xBee = serial('COM4', 'BaudRate', 115200, 'Parity', 'none', 'DataBits', 8);
 fopen(xBee);
 
 
-format compact;
-fullData = [];
-for i=1:seconds/timeIncrement
-    [data3DOF data6DOF] = QMC(qtm, 'frameinfo');
-    data6DOF  % Print the 6 degree of freedom data
-    fullData = [fullData;data6DOF]; % Make a giant array with all of the data
-    pause(timeIncrement)  % Wait the indicated period of time until the next measurement
-end
+% format compact;
+% fullData = [];
+% for i=1:seconds/timeIncrement
+%     [data3DOF data6DOF] = QMC(qtm, 'frameinfo');
+%     data6DOF  % Print the 6 degree of freedom data
+%     fullData = [fullData;data6DOF]; % Make a giant array with all of the data
+%     pause(timeIncrement)  % Wait the indicated period of time until the next measurement
+% end
 
 
 gameBoundariesX = [-3.8e03, 3e03];
 gameBoundariesY = [-3.3e03, 2e03];
 
-trial = 3;
+trial = 12;
 replicate = 1;
 gameName = "trial" + int2str(trial) + "rep" + int2str(replicate); % use for filename output
 
@@ -236,7 +236,7 @@ allFinished = 0;
 while allFinished == 0
     % Get data from QTM
     [data3DOF, data6DOF] = QMC(qtm, 'frameinfo');
-    data6DOF
+    data6DOF;
     % Update the positions
     if isempty(humanMinnowList) == 0
         for i=1:length(humanMinnowList)
@@ -265,38 +265,6 @@ while allFinished == 0
     end
     humanList = [humanMinnowList, humanSharkList];
     robotList = [robotMinnowList, robotSharkList];
-    %{
-    finishedMinnows = 0;
-    if mod(trial, 2) == 1
-        if isempty(robotMinnowList) == 1
-            for i=1:10
-                finishedMinnows = finishedMinnows + humanMinnowList(i).finished;
-            end
-        else
-            for i=1:8
-                finishedMinnows = finishedMinnows + humanMinnowList(i).finished;
-            end
-            finishedMinnows = finishedMinnows + robotMinnowList(1).finished + robotMinnowList(2).finished;
-        end
-        if finishedMinnows == 10
-            allFinished = 1;
-        end
-    else
-        if isempty(robotMinnowList) == 1
-            for i=1:5
-                finishedMinnows = finishedMinnows + humanMinnowList(i).finished;
-            end
-        else
-            for i=1:3
-                finishedMinnows = finishedMinnows + humanMinnowList(i).finished;
-            end
-            finishedMinnows = finishedMinnows + robotMinnowList(1).finished + robotMinnowList(2).finished;
-        end
-        if finishedMinnows == 5
-            allFinished = 1;
-        end
-    end
-    
     
     % Determine the appropriate velocities for each of the robots, save
     % them in the object classes to send over xBee
@@ -307,7 +275,7 @@ while allFinished == 0
             end
             robotSharkList(i).sharkMove(humanMinnowList(robotSharkList(i).markedMinnow), humanMinnowList);
         end
-    elseif (13 <= trial)
+    elseif (13 >= trial)
         for i=1:length(robotMinnowList)
             robotMinnowList(i).minnowMove(humanMinnowList, humanSharkList);
         end
@@ -334,20 +302,19 @@ while allFinished == 0
     for i=1:length(robotMinnowList)
         velocities = [velocities; robotList(i).velocity];
     end
-    fprintf('again')
     if isempty(robotList) == 0
         break
     elseif length(robotList) == 1
-        velocityString = num2str(velocities(1,1)) + ' ' + num2str(velocities(1,2));
+        velocityString = num2str(velocities(1,2)) + ' ' + num2str(velocities(1,1));
         fprintf(xBee,'%s',velocityString);
     elseif length(robotList) == 2
-        velocityString = num2str(velocities(1,1)) + ' ' + num2str(velocities(1,2)) + ' ' + num2str(velocities(2,1)) + ' ' + num2str(velocities(2,1));
+        velocityString = num2str(velocities(1,2)) + ' ' + num2str(velocities(1,1)) + ' ' + num2str(velocities(2,2)) + ' ' + num2str(velocities(2,1));
         fprintf(xBee,'%s',velocityString);
     elseif length(robotList) == 3
-        velocityString = num2str(velocities(1,1)) + ' ' + num2str(velocities(1,2)) + ' ' + num2str(velocities(2,1)) + ' ' + num2str(velocities(2,1)) + ' robot3' + num2str(velocities(3,1)) + ' ' + num2str(velocities(3,1));
+        velocityString = num2str(velocities(1,2)) + ' ' + num2str(velocities(1,1)) + ' ' + num2str(velocities(2,1)) + ' ' + num2str(velocities(2,1)) + ' ' + num2str(velocities(3,2)) + ' ' + num2str(velocities(3,1));
         fprintf(xBee,'%s',velocityString);
     end
-    %}
+    
     
 end
 
