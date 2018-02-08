@@ -1,0 +1,53 @@
+%% This script will take the position data from the lists provided and 
+% output the data as a regular list for easier data analysis
+
+trial = 4;
+replicate = 1;
+gameName = 'trial' + int2str(trial) + 'rep' + int2str(replicate); % use for filename output
+
+if trial < 7
+    robotMinnows = 0;
+    robotSharks = 0;
+    if mod(trial, 2) == 1
+        humanMinnows = 10;
+    else
+        humanMinnows = 5;
+    end
+    if trial < 3
+        humanSharks = 3;
+    elseif trial < 5
+        humanSharks = 2;
+    else
+        humanSharks = 1;
+    end
+elseif trial < 13
+    robotMinnows = 0;
+    humanSharks = 0;
+    if mod(trial, 2) == 1
+        humanMinnows = 10;
+    else
+        humanMinnows = 5;
+    end
+    if trial < 9
+        robotSharks = 3;
+    elseif trial < 11
+        robotSharks = 2;
+    else
+        robotSharks = 1;
+    end
+else
+    robotSharks = 0;
+    robotMinnows = 2;
+    if mod(trial, 2) == 1
+        humanMinnows = 8;
+    else
+        humanMinnows = 3;
+    end
+    if trial < 15
+        humanSharks = 3;
+    elseif trial < 17
+        humanSharks = 2;
+    else
+        humanSharks = 1;
+    end
+end
