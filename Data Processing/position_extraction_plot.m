@@ -62,30 +62,32 @@ if isempty(humanMinnowList) == 0
     % won't return an error because it's length is 0
     for i=1:length(humanMinnowList)
         humanMinnowPositions = [humanMinnowPositions, humanMinnowList(i).historicalPosition];
-        graphHMinnow = [graphHMinnow, strcat("humanMinnow",int2str(i))];
+        graphHMinnow = [graphHMinnow, strcat('humanMinnow',int2str(i))];
     end
 end
 
 if isempty(humanSharkList) == 0
     for i=1:length(humanSharkList)
         humanSharkPositions = [humanSharkPositions, humanSharkList(i).historicalPosition];
-        graphHShark = [graphHShark, strcat("humanShark",int2str(i))];
+        graphHShark = [graphHShark, strcat('humanShark',int2str(i))];
     end
 end
 
 if isempty(robotMinnowList) == 0
     for i=1:length(robotMinnowList)
         robotMinnowPositions = [robotMinnowPositions, robotMinnowList(i).historicalPosition];
-        graphRMinnow = [graphRMinnow, strcat("robotMinnow",int2str(i))];
+        graphRMinnow = [graphRMinnow, strcat('robotMinnow',int2str(i))];
     end
 end
 
 if isempty(robotSharkList) == 0
     for i=1:length(robotSharkList)
         robotSharkPositions = [robotSharkPositions, robotSharkList(i).historicalPosition];
-        graphRShark = [graphRShark, strcat("robotShark",int2str(i))];
+        graphRShark = [graphRShark, strcat('robotShark',int2str(i))];
     end
 end
+
+
 
 graphPositions = [humanMinnowPositions, humanSharkPositions, robotMinnowPositions,robotSharkPositions];
 graphLabel = [graphHMinnow, graphHShark, graphRMinnow, graphRShark];
