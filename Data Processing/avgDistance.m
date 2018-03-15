@@ -13,8 +13,8 @@ for k = 1:loop0
     for i =1:loop1
    
         for j = i+1:loop2
-        xPos = graphPositions(k,i)- graphPositions(k,2*j-1);
-        yPos = graphPositions(k,i+1)- graphPositions(k,2*j);
+        xPos = graphPositions(k,2*i-1)- graphPositions(k,2*j-1);
+        yPos = graphPositions(k,2*i)- graphPositions(k,2*j);
         dist = sqrt(xPos^2+yPos^2);
         total = total + dist;
         count = count +1;
