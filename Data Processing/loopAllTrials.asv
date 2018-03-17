@@ -9,12 +9,20 @@ xMin =[];
 yMin = [];
 xTotal =[];
 yTotal = [];
+xAverage =[];
+yAverage = [];
+xVel = [];
+yVel = [];
+xTime =[];
+yTime =[];
 
 for l =1:17
 trial = l;
 
 minimumAverageSplit = NaN(21,15);
 totalDistanceSplit = NaN(21,15);
+avgVelSplit = NaN(21,15);
+avgTSplit = NaN(21,15);
 
     for w =1:21
     replicate =w;
@@ -128,10 +136,14 @@ end
 
 graphPositions = transpose(fixedPositions);
 averageDistance(w,l) = avgDistance(graphPositions);
+yAverage = [yAverage averageDistance(w,l)];
+xAverage = [xAverage l];
 minimumDistance(w,l) = minDistance(graphPositions);
 traveledDistance(w,l) = totDistance(graphPositions);
 minimumAverageSplit(w,1:size(graphPositions,2)/2) = minAverageSplit(graphPositions);
 totalDistanceSplit(w,1:size(graphPositions,2)/2) = totDistanceSplit(graphPositions);
+avgVelSplit(w,1:size(graphPositions,2)/2) = avgVelocitySplit(graphPositions);
+avgTSplit(w,1:size(graphPositions,2)/2) = avgTimeSplit(graphPositions);
 
 catch
 end
@@ -141,6 +153,10 @@ end
     yMin = [yMin mean(minimumAverageSplit,'omitnan')];
     xTotal = [xTotal l.*ones(1,15)];
     yTotal = [yTotal mean(totalDistanceSplit,'omitnan')];
+    xVel = [xVel l.*ones(1,15)];
+    yVel = [yVel mean(avgVelSplit,'omitnan')];
+    xTime = [xTime l.*ones(1,15)];
+    yTime = [yTime mean(avgTSplit,'omitnan')];
     
 end
 
@@ -148,6 +164,11 @@ figure()
 bar(mean(averageDistance,'omitnan'))
 title('Average Distance for Each Trial')
 xlabel('Trial Number')
+
+figure()
+plot(xAverage,yAverage,'*')
+    title('Average Distance Broken Down By Replicate')
+    xlabel('Trial Number')
 
 figure()
 bar(mean(minimumDistance,'omitnan'))
@@ -163,3 +184,18 @@ figure()
 bar(mean(traveledDistance,'omitnan'))
 title('Total Distance for Each Trial')
 xlabel('Trial Number')
+
+figure()
+plot(xTotal,yTotal,'*')
+    title('Total Distance Broken Down By Person')
+    xlabel('Trial Number')
+    
+figure()
+plot(xVel,yVel,'*')
+    title('Average Velocity Broken Down By Person')
+    xlabel('Trial Number') 
+    
+figure()
+plot(xTime,yTime,'*')
+    title('Average Velocity Broken Down By Person')
+    xlabel('Trial Number')     
