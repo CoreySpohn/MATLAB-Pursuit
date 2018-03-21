@@ -1,6 +1,8 @@
-%% This script will take the position data from the lists provided and 
-% output the data as a regular list for easier data analysis
+%This script loops through all the replicates for each trial in the
+%experiment
 
+% vector size is 21*17 because there are at most 21 replicates and 17
+% trials
 clear
 averageDistance = NaN(21,17);
 minimumDistance = NaN(21,17);
@@ -16,19 +18,25 @@ yVel = [];
 xTime =[];
 yTime =[];
 
+%looping through every trial
 for l =1:17
 trial = l;
 
+%these variables are used to split up data analysis by person in each trial
+%The dimension is 21*15 because at most 21 replicates and 15 people in a
+%trial
 minimumAverageSplit = NaN(21,15);
 totalDistanceSplit = NaN(21,15);
 avgVelSplit = NaN(21,15);
 avgTSplit = NaN(21,15);
 
+%loop through every replicate
     for w =1:21
     replicate =w;
 
     
-    
+%some replicates have an error so the try catch statement ignores replicates with errors
+%the code to load a file in is copied from the position_extraction script
 try
 %% Load the proper files based on the trial and replicate designated above
 gameName = ['trial', int2str(trial), 'rep', int2str(replicate)]; % use for filename output
@@ -135,6 +143,8 @@ for i=1:size(listOfLists,2)
 end
 
 graphPositions = transpose(fixedPositions);
+
+%Calling function for data anlysis and storing function return values
 averageDistance(w,l) = avgDistance(graphPositions);
 yAverage = [yAverage averageDistance(w,l)];
 xAverage = [xAverage l];
@@ -149,6 +159,7 @@ catch
 end
     end
     
+    %storing x and y values to plot the data
     xMin = [xMin l.*ones(1,15)];
     yMin = [yMin mean(minimumAverageSplit,'omitnan')];
     xTotal = [xTotal l.*ones(1,15)];
@@ -160,6 +171,7 @@ end
     
 end
 
+%plotting the data analysis
 figure()
 bar(mean(averageDistance,'omitnan'))
 title('Average Distance for Each Trial')
