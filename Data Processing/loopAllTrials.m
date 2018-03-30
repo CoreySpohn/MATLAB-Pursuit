@@ -17,6 +17,18 @@ xVel = [];
 yVel = [];
 xTime =[];
 yTime =[];
+%xMinSpecies =categorical({});
+yMinSpecies = [];
+%xTotalSpecies = [];
+yTotalSpecies = [];
+%xVelSpecies = [];
+yVelSpecies = [];
+%xTimeSpecies = [];
+yTimeSpecies = [];
+yMinStd = [];
+yTotalStd = [];
+yVelStd = [];
+yTimeStd = [];
 
 %looping through every trial
 for l =1:17
@@ -145,11 +157,12 @@ end
 graphPositions = transpose(fixedPositions);
 
 %Calling function for data anlysis and storing function return values
-averageDistance(w,l) = avgDistance(graphPositions);
-yAverage = [yAverage averageDistance(w,l)];
-xAverage = [xAverage l];
-minimumDistance(w,l) = minDistance(graphPositions);
-traveledDistance(w,l) = totDistance(graphPositions);
+
+%averageDistance(w,l) = avgDistance(graphPositions);
+%yAverage = [yAverage averageDistance(w,l)];
+%xAverage = [xAverage l];
+%minimumDistance(w,l) = minDistance(graphPositions);
+%traveledDistance(w,l) = totDistance(graphPositions);
 minimumAverageSplit(w,1:size(graphPositions,2)/2) = minAverageSplit(graphPositions);
 totalDistanceSplit(w,1:size(graphPositions,2)/2) = totDistanceSplit(graphPositions);
 avgVelSplit(w,1:size(graphPositions,2)/2) = avgVelocitySplit(graphPositions);
@@ -160,6 +173,7 @@ end
     end
     
     %storing x and y values to plot the data
+    
     xMin = [xMin l.*ones(1,15)];
     yMin = [yMin mean(minimumAverageSplit,'omitnan')];
     xTotal = [xTotal l.*ones(1,15)];
@@ -169,45 +183,187 @@ end
     xTime = [xTime l.*ones(1,15)];
     yTime = [yTime mean(avgTSplit,'omitnan')];
     
+    if l == 3
+        hShark = 2;
+        hMinnow = 10;
+        rShark = 0;
+        rMinnow =0;
+    elseif l==4
+        hShark = 2;
+        hMinnow = 5;
+        rShark = 0;
+        rMinnow =0;
+    elseif l==7
+        hShark = 0;
+        hMinnow = 10;
+        rShark = 3;
+        rMinnow =0;
+    elseif l==8
+        hShark = 0;
+        hMinnow = 5;
+        rShark = 3;
+        rMinnow =0;
+    elseif l==9
+        hShark = 0;
+        hMinnow = 10;
+        rShark = 2;
+        rMinnow =0;
+    elseif l==15
+        hShark = 2;
+        hMinnow = 8;
+        rShark = 0;
+        rMinnow =2;
+    elseif l==16
+        hShark = 2;
+        hMinnow = 3;
+        rShark = 0;
+        rMinnow =2;
+    elseif l==17
+        hShark = 1;
+        hMinnow = 8;
+        rShark = 0;
+        rMinnow =2;
+    else
+        hShark = 2;
+        hMinnow = 10;
+        rShark = 0;
+        rMinnow =0;
+    end
+    
+    a = mean(minimumAverageSplit,'omitnan');
+    b = mean(totalDistanceSplit,'omitnan');
+    c = mean(avgVelSplit,'omitnan');
+    d = mean(avgTSplit,'omitnan');
+    
+    if l==3 || l==4 || l==7 || l==8 ||l==9 ||l==15 ||l==16 ||l==17
+    %x = categorical({'3','4','7','8','9',' 15',' 16',' 17'});
+    %x = reordercats(x,{'3','4','7','8','9',' 15',' 16',' 17'});
+    x=1:8;
+    yMinSpecies = [yMinSpecies ;mean(a(1:hMinnow),'omitnan') mean(a(hMinnow+1:hShark+hMinnow),'omitnan') mean(a(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(a(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan')];
+    yTotalSpecies = [yTotalSpecies ;mean(b(1:hMinnow),'omitnan') mean(b(hMinnow+1:hShark+hMinnow),'omitnan') mean(b(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(b(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan')];
+    yVelSpecies = [yVelSpecies ;mean(c(1:hMinnow),'omitnan') mean(c(hMinnow+1:hShark+hMinnow),'omitnan') mean(c(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(c(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan')];
+    yTimeSpecies = [yTimeSpecies ;mean(d(1:hMinnow),'omitnan') mean(d(hMinnow+1:hShark+hMinnow),'omitnan') mean(d(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(d(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan')];
+    yMinStd = [yMinStd ;std(mean(minimumAverageSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(minimumAverageSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(minimumAverageSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(minimumAverageSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan')];
+    yTotalStd = [yTotalStd ;std(mean(totalDistanceSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(totalDistanceSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(totalDistanceSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(totalDistanceSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan')];
+    yVelStd = [yVelStd ;std(mean(avgVelSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(avgVelSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(avgVelSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(avgVelSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan')];
+    yTimeStd = [yTimeStd ;std(mean(avgTSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(avgTSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(avgTSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(avgTSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan')];
+    
+    end
+    
 end
 
+    
+
 %plotting the data analysis
-figure()
-bar(mean(averageDistance,'omitnan'))
-title('Average Distance for Each Trial')
-xlabel('Trial Number')
+
+%figure()
+%bar(mean(averageDistance,'omitnan'))
+%title('Average Distance for Each Trial')
+%xlabel('Trial Number')
+
+%figure()
+%plot(xAverage,yAverage,'*')
+ %   title('Average Distance Broken Down By Replicate')
+  %  xlabel('Trial Number')
+
+%figure()
+%bar(mean(minimumDistance,'omitnan'))
+%title('Minimum Distance for Each Trial')
+%xlabel('Trial Number')
 
 figure()
-plot(xAverage,yAverage,'*')
-    title('Average Distance Broken Down By Replicate')
+h= bar(yMinSpecies)
+set(gca,'XTickLabel', {'3','4','7','8','9','15','16','17'})
+yMinStd = transpose(yMinStd);
+for k1 = 1:size(h,2)
+    ctr(k1,:) = bsxfun(@plus, h(k1).XData, [h(k1).XOffset]');             % Centres Of Bar Groups
+    ydt(k1,:) = h(k1).YData;                                                 % Y-Data Of Bar Groups
+end
+hold on
+for k1 = 1:size(h,2)
+    errorbar(ctr(k1,:), ydt(k1,:), yMinStd(k1,:), '.r')
+end
+hold off
+
+    title('Minimum Distance Broken Down By Species')
     xlabel('Trial Number')
+colormap(summer(4));
+grid on
+l = cell(1,4);
+l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
+legend(h,l,'Location','bestoutside');
+
+
+%figure()
+%bar(mean(traveledDistance,'omitnan'))
+%title('Total Distance for Each Trial')
+%xlabel('Trial Number')
 
 figure()
-bar(mean(minimumDistance,'omitnan'))
-title('Minimum Distance for Each Trial')
-xlabel('Trial Number')
+p=bar(yTotalSpecies)
 
-figure()
-plot(xMin,yMin,'*')
-    title('Minimum Distance Broken Down By Person')
+set(gca,'XTickLabel', {'3','4','7','8','9','15','16','17'})
+yTotalStd = transpose(yTotalStd);
+for k1 = 1:size(p,2)
+    ctr(k1,:) = bsxfun(@plus, p(k1).XData, [p(k1).XOffset]');             % Centres Of Bar Groups
+    ydt(k1,:) = p(k1).YData;                                                 % Y-Data Of Bar Groups
+end
+hold on
+for k1 = 1:size(p,2)
+    errorbar(ctr(k1,:), ydt(k1,:), yTotalStd(k1,:), '.r')
+end
+hold off
+
+title('Total Distance Broken Down By Species')
     xlabel('Trial Number')
+colormap(summer(4));
+grid on
+l = cell(1,4);
+l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
+legend(p,l,'Location','bestoutside');
 
 figure()
-bar(mean(traveledDistance,'omitnan'))
-title('Total Distance for Each Trial')
-xlabel('Trial Number')
+y=bar(yVelSpecies)
 
-figure()
-plot(xTotal,yTotal,'*')
-    title('Total Distance Broken Down By Person')
-    xlabel('Trial Number')
-    
-figure()
-plot(xVel,yVel,'*')
-    title('Average Velocity Broken Down By Person')
+set(gca,'XTickLabel', {'3','4','7','8','9','15','16','17'})
+yVelStd = transpose(yVelStd);
+for k1 = 1:size(y,2)
+    ctr(k1,:) = bsxfun(@plus, y(k1).XData, [y(k1).XOffset]');             % Centres Of Bar Groups
+    ydt(k1,:) = y(k1).YData;                                                 % Y-Data Of Bar Groups
+end
+hold on
+for k1 = 1:size(y,2)
+    errorbar(ctr(k1,:), ydt(k1,:), yVelStd(k1,:), '.r')
+end
+hold off
+
+    title('Average Velocity Broken Down By Species')
     xlabel('Trial Number') 
+    colormap(summer(4));
+grid on
+l = cell(1,4);
+l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
+legend(y,l,'Location','bestoutside');
     
 figure()
-plot(xTime,yTime,'*')
-    title('Average Time Broken Down By Person')
+u=bar(yTimeSpecies)
+
+set(gca,'XTickLabel', {'3','4','7','8','9','15','16','17'})
+yTimeStd = transpose(yTimeStd);
+for k1 = 1:size(u,2)
+    ctr(k1,:) = bsxfun(@plus, u(k1).XData, [u(k1).XOffset]');             % Centres Of Bar Groups
+    ydt(k1,:) = u(k1).YData;                                                 % Y-Data Of Bar Groups
+end
+hold on
+for k1 = 1:size(u,2)
+    errorbar(ctr(k1,:), ydt(k1,:), yTimeStd(k1,:), '.r')
+end
+hold off
+
+    title('Average Time Broken Down By Species')
     xlabel('Trial Number')     
+    colormap(summer(4));
+grid on
+l = cell(1,4);
+l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
+legend(u,l,'Location','bestoutside');
