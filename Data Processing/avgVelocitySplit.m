@@ -10,7 +10,7 @@ avgVelocity = [];
         j=0;
         
         for p = 1:size(graphPositions,1)
-        %The participant has to start in the start area which is -4000<x<-1000 and -4000<y<3000    
+        %The participant has to start in the start area which is -3000<x<-1000 and -4000<y<3000, this finds the first time the person enters the play area    
         if (graphPositions(p,2*i-1)< -1000) && (graphPositions(p,2*i-1)> -3000) &&(graphPositions(p,2*i)< 3000) && (graphPositions(p,2*i-1)> -4000)
             j=p;
             break
@@ -24,6 +24,8 @@ avgVelocity = [];
         %after they cross the finish line
         while t==0
         
+        %if the person never entered the play area then j=0 so the loop
+        %exits
         if j==0
            avgVelocity = [avgVelocity NaN];
            break
@@ -37,7 +39,8 @@ avgVelocity = [];
             
             %exiting the loop if the participant reaches the finish line at
             %2000, or the person goes out of bounds in y direction y>4000
-            %or y <-3000
+            %or y <-3000, j-p is the end timestep minus the first timestep
+            %in the play area
             if graphPositions(j+1,2*i-1)> 2000
                 avgVelocity = [avgVelocity totalDistance/(j-p)];
                 t=1;

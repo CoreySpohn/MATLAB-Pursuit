@@ -1,7 +1,7 @@
 %This script loops through all the replicates for each trial in the
 %experiment
 
-% vector size is 21*17 because there are at most 21 replicates and 17
+% vector size is 21*17 because there are at most 21 replicates and at most 17
 % trials
 clear
 averageDistance = NaN(21,17);
@@ -17,13 +17,9 @@ xVel = [];
 yVel = [];
 xTime =[];
 yTime =[];
-%xMinSpecies =categorical({});
 yMinSpecies = [];
-%xTotalSpecies = [];
 yTotalSpecies = [];
-%xVelSpecies = [];
 yVelSpecies = [];
-%xTimeSpecies = [];
 yTimeSpecies = [];
 yMinStd = [];
 yTotalStd = [];
@@ -156,13 +152,7 @@ end
 
 graphPositions = transpose(fixedPositions);
 
-%Calling function for data anlysis and storing function return values
-
-%averageDistance(w,l) = avgDistance(graphPositions);
-%yAverage = [yAverage averageDistance(w,l)];
-%xAverage = [xAverage l];
-%minimumDistance(w,l) = minDistance(graphPositions);
-%traveledDistance(w,l) = totDistance(graphPositions);
+%Calling function for data anlysis and storing function return values 
 minimumAverageSplit(w,1:size(graphPositions,2)/2) = minAverageSplit(graphPositions);
 totalDistanceSplit(w,1:size(graphPositions,2)/2) = totDistanceSplit(graphPositions);
 avgVelSplit(w,1:size(graphPositions,2)/2) = avgVelocitySplit(graphPositions);
@@ -172,17 +162,8 @@ catch
 end
     end
     
-    %storing x and y values to plot the data
-    
-    xMin = [xMin l.*ones(1,15)];
-    yMin = [yMin mean(minimumAverageSplit,'omitnan')];
-    xTotal = [xTotal l.*ones(1,15)];
-    yTotal = [yTotal mean(totalDistanceSplit,'omitnan')];
-    xVel = [xVel l.*ones(1,15)];
-    yVel = [yVel mean(avgVelSplit,'omitnan')];
-    xTime = [xTime l.*ones(1,15)];
-    yTime = [yTime mean(avgTSplit,'omitnan')];
-    
+    %The l values are trial numbers, this breaks down the number of each
+    %species for the different trial numbers
     if l == 3
         hShark = 2;
         hMinnow = 10;
@@ -230,19 +211,23 @@ end
         rMinnow =0;
     end
     
+    %intermediate calculation
     a = mean(minimumAverageSplit,'omitnan');
     b = mean(totalDistanceSplit,'omitnan');
     c = mean(avgVelSplit,'omitnan');
     d = mean(avgTSplit,'omitnan');
     
+    %the l values are trial numbers we had data for
     if l==3 || l==4 || l==7 || l==8 ||l==9 ||l==15 ||l==16 ||l==17
-    %x = categorical({'3','4','7','8','9',' 15',' 16',' 17'});
-    %x = reordercats(x,{'3','4','7','8','9',' 15',' 16',' 17'});
-    x=1:8;
+    
+    %bar plot values, this averages participants of the same species, for
+    %example all human minnow values are averaged together
     yMinSpecies = [yMinSpecies ;mean(a(1:hMinnow),'omitnan') mean(a(hMinnow+1:hShark+hMinnow),'omitnan') mean(a(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(a(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan')];
     yTotalSpecies = [yTotalSpecies ;mean(b(1:hMinnow),'omitnan') mean(b(hMinnow+1:hShark+hMinnow),'omitnan') mean(b(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(b(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan')];
     yVelSpecies = [yVelSpecies ;mean(c(1:hMinnow),'omitnan') mean(c(hMinnow+1:hShark+hMinnow),'omitnan') mean(c(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(c(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan')];
     yTimeSpecies = [yTimeSpecies ;mean(d(1:hMinnow),'omitnan') mean(d(hMinnow+1:hShark+hMinnow),'omitnan') mean(d(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(d(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan')];
+    
+    %standard deviation for the replicates in each trial
     yMinStd = [yMinStd ;std(mean(minimumAverageSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(minimumAverageSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(minimumAverageSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(minimumAverageSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan')];
     yTotalStd = [yTotalStd ;std(mean(totalDistanceSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(totalDistanceSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(totalDistanceSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(totalDistanceSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan')];
     yVelStd = [yVelStd ;std(mean(avgVelSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(avgVelSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(avgVelSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(avgVelSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan')];
@@ -256,21 +241,8 @@ end
 
 %plotting the data analysis
 
-%figure()
-%bar(mean(averageDistance,'omitnan'))
-%title('Average Distance for Each Trial')
-%xlabel('Trial Number')
-
-%figure()
-%plot(xAverage,yAverage,'*')
- %   title('Average Distance Broken Down By Replicate')
-  %  xlabel('Trial Number')
-
-%figure()
-%bar(mean(minimumDistance,'omitnan'))
-%title('Minimum Distance for Each Trial')
-%xlabel('Trial Number')
-
+%this plots the minimum distance bar plot with error bars, the error bars are added in the two
+%for loops
 figure()
 h= bar(yMinSpecies)
 set(gca,'XTickLabel', {'3','4','7','8','9','15','16','17'})
@@ -293,15 +265,10 @@ l = cell(1,4);
 l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
 legend(h,l,'Location','bestoutside');
 
-
-%figure()
-%bar(mean(traveledDistance,'omitnan'))
-%title('Total Distance for Each Trial')
-%xlabel('Trial Number')
-
+%this plots the total distance bar plot with error bars, the error bars are added in the two
+%for loops 
 figure()
 p=bar(yTotalSpecies)
-
 set(gca,'XTickLabel', {'3','4','7','8','9','15','16','17'})
 yTotalStd = transpose(yTotalStd);
 for k1 = 1:size(p,2)
@@ -322,9 +289,10 @@ l = cell(1,4);
 l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
 legend(p,l,'Location','bestoutside');
 
+%this plots the velocity bar plot with error bars, the error bars are added in the two
+%for loops 
 figure()
 y=bar(yVelSpecies)
-
 set(gca,'XTickLabel', {'3','4','7','8','9','15','16','17'})
 yVelStd = transpose(yVelStd);
 for k1 = 1:size(y,2)
@@ -344,10 +312,11 @@ grid on
 l = cell(1,4);
 l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
 legend(y,l,'Location','bestoutside');
-    
+
+%this plots the total time bar plot with error bars, the error bars are added in the two
+%for loops
 figure()
 u=bar(yTimeSpecies)
-
 set(gca,'XTickLabel', {'3','4','7','8','9','15','16','17'})
 yTimeStd = transpose(yTimeStd);
 for k1 = 1:size(u,2)
