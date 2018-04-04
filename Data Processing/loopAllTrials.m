@@ -184,11 +184,6 @@ end
         hMinnow = 5;
         rShark = 3;
         rMinnow =0;
-    elseif l==9
-        hShark = 0;
-        hMinnow = 10;
-        rShark = 2;
-        rMinnow =0;
     elseif l==15
         hShark = 2;
         hMinnow = 8;
@@ -218,26 +213,33 @@ end
     d = mean(avgTSplit,'omitnan');
     
     %the l values are trial numbers we had data for
-    if l==3 || l==4 || l==7 || l==8 ||l==9 ||l==15 ||l==16 ||l==17
+    if l==3 || l==4 || l==7 || l==8 ||l==15 ||l==16 ||l==17
     
     %bar plot values, this averages participants of the same species, for
     %example all human minnow values are averaged together
-    yMinSpecies = [yMinSpecies ;mean(a(1:hMinnow),'omitnan') mean(a(hMinnow+1:hShark+hMinnow),'omitnan') mean(a(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(a(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan')];
-    yTotalSpecies = [yTotalSpecies ;mean(b(1:hMinnow),'omitnan') mean(b(hMinnow+1:hShark+hMinnow),'omitnan') mean(b(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(b(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan')];
-    yVelSpecies = [yVelSpecies ;mean(c(1:hMinnow),'omitnan') mean(c(hMinnow+1:hShark+hMinnow),'omitnan') mean(c(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(c(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan')];
-    yTimeSpecies = [yTimeSpecies ;mean(d(1:hMinnow),'omitnan') mean(d(hMinnow+1:hShark+hMinnow),'omitnan') mean(d(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(d(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan')];
+    yMinSpecies = [yMinSpecies ;mean(a(1:hMinnow),'omitnan') mean(a(hMinnow+1:hShark+hMinnow),'omitnan') mean(a(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(a(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan') NaN NaN NaN];
+    yTotalSpecies = [yTotalSpecies ; mean(b(1:hMinnow),'omitnan') mean(b(hMinnow+1:hShark+hMinnow),'omitnan') mean(b(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(b(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan') NaN NaN NaN];
+    yVelSpecies = [yVelSpecies ;mean(c(1:hMinnow),'omitnan') mean(c(hMinnow+1:hShark+hMinnow),'omitnan') mean(c(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(c(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan') NaN NaN NaN];
+    yTimeSpecies = [yTimeSpecies ; mean(d(1:hMinnow),'omitnan') mean(d(hMinnow+1:hShark+hMinnow),'omitnan') mean(d(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(d(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan') NaN NaN NaN];
     
     %standard deviation for the replicates in each trial
-    yMinStd = [yMinStd ;std(mean(minimumAverageSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(minimumAverageSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(minimumAverageSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(minimumAverageSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan')];
-    yTotalStd = [yTotalStd ;std(mean(totalDistanceSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(totalDistanceSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(totalDistanceSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(totalDistanceSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan')];
-    yVelStd = [yVelStd ;std(mean(avgVelSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(avgVelSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(avgVelSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(avgVelSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan')];
-    yTimeStd = [yTimeStd ;std(mean(avgTSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(avgTSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(avgTSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(avgTSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan')];
+    yMinStd = [yMinStd ; std(mean(minimumAverageSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(minimumAverageSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(minimumAverageSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(minimumAverageSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan') NaN NaN NaN];
+    yTotalStd = [yTotalStd ;std(mean(totalDistanceSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(totalDistanceSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(totalDistanceSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(totalDistanceSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan') NaN NaN NaN];
+    yVelStd = [yVelStd ;std(mean(avgVelSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(avgVelSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(avgVelSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(avgVelSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan') NaN NaN NaN];
+    yTimeStd = [yTimeStd ; std(mean(avgTSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(avgTSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(avgTSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(avgTSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan') NaN NaN NaN];
     
     end
     
 end
 
-    
+descr = {'Trial Letter to Trial Number:';
+    'A=3';
+    'B=4';
+    'C=7';
+    'D=8';
+    'E=15';
+    'F=16';
+    'G=17'};    
 
 %plotting the data analysis
 
@@ -245,7 +247,7 @@ end
 %for loops
 figure()
 h= bar(yMinSpecies)
-set(gca,'XTickLabel', {'3','4','7','8','9','15','16','17'})
+set(gca,'XTickLabel', {'A','B','C','D','E','F','G'})
 yMinStd = transpose(yMinStd);
 for k1 = 1:size(h,2)
     ctr(k1,:) = bsxfun(@plus, h(k1).XData, [h(k1).XOffset]');             % Centres Of Bar Groups
@@ -264,12 +266,13 @@ grid on
 l = cell(1,4);
 l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
 legend(h,l,'Location','bestoutside');
+text(7.8,1400,descr)
 
 %this plots the total distance bar plot with error bars, the error bars are added in the two
 %for loops 
 figure()
 p=bar(yTotalSpecies)
-set(gca,'XTickLabel', {'3','4','7','8','9','15','16','17'})
+set(gca,'XTickLabel', {'A','B','C','D','E','F','G'})
 yTotalStd = transpose(yTotalStd);
 for k1 = 1:size(p,2)
     ctr(k1,:) = bsxfun(@plus, p(k1).XData, [p(k1).XOffset]');             % Centres Of Bar Groups
@@ -288,12 +291,13 @@ grid on
 l = cell(1,4);
 l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
 legend(p,l,'Location','bestoutside');
+text(7.8,11000,descr)
 
 %this plots the velocity bar plot with error bars, the error bars are added in the two
 %for loops 
 figure()
 y=bar(yVelSpecies)
-set(gca,'XTickLabel', {'3','4','7','8','9','15','16','17'})
+set(gca,'XTickLabel', {'A','B','C','D','E','F','G'})
 yVelStd = transpose(yVelStd);
 for k1 = 1:size(y,2)
     ctr(k1,:) = bsxfun(@plus, y(k1).XData, [y(k1).XOffset]');             % Centres Of Bar Groups
@@ -312,12 +316,13 @@ grid on
 l = cell(1,4);
 l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
 legend(y,l,'Location','bestoutside');
+text(7.8,125,descr)
 
 %this plots the total time bar plot with error bars, the error bars are added in the two
 %for loops
 figure()
 u=bar(yTimeSpecies)
-set(gca,'XTickLabel', {'3','4','7','8','9','15','16','17'})
+set(gca,'XTickLabel', {'A','B','C','D','E','F','G'})
 yTimeStd = transpose(yTimeStd);
 for k1 = 1:size(u,2)
     ctr(k1,:) = bsxfun(@plus, u(k1).XData, [u(k1).XOffset]');             % Centres Of Bar Groups
@@ -336,3 +341,4 @@ grid on
 l = cell(1,4);
 l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
 legend(u,l,'Location','bestoutside');
+text(7.8,225,descr)
