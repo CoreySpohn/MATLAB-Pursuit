@@ -232,14 +232,20 @@ end
     
 end
 
-descr = {'Trial Letter to Trial Number:';
-    'A=3';
-    'B=4';
-    'C=7';
-    'D=8';
-    'E=15';
-    'F=16';
-    'G=17'};    
+descr = {'Trial Descriptions:';
+         '       |A   |B  |C |D |E|F |G';
+         '        --------------------------';
+         'Hmn|10 |5  |10|5 |8 |3 |8';
+         'Mnw|       ';
+         '                           ';
+         'Hmn|2   |2  |0  |0 |2 |2 |1 ';
+         'Srk  |';
+         '                         ';
+         'Rbt  |0   |0  |0  |0 |2 |2 |2 ';
+         'Mnw|';
+         '                         ';
+         'Rbt  |0   |0  |3  |3 |0 |0 |0 ';
+         'Srk  |';};    
 
 %plotting the data analysis
 
@@ -260,13 +266,19 @@ end
 hold off
 
     title('Minimum Distance Broken Down By Species')
-    xlabel('Trial Number')
+    xlabel('Trial')
 colormap(summer(4));
 grid on
 l = cell(1,4);
 l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
 legend(h,l,'Location','bestoutside');
-text(7.8,1400,descr)
+text(7.8,1100,descr)
+%dat = [10, 2, 0, 0; 5, 2, 0, 0; 10, 0, 0, 3; 5, 0, 0, 3; 8, 2, 2, 0; 3, 2, 2, 0; 8, 1, 2, 0];
+%cnames = {'Human Minnow','Human Shark','Robot Minnow','Robot Shark'};
+%rnames = {'Aa','Ba','Ca','Da','Ea','Fa','Ga'};
+%t = uitable(h);
+%t.data = dat;
+%t.ColumnName = cnames;
 
 %this plots the total distance bar plot with error bars, the error bars are added in the two
 %for loops 
@@ -285,13 +297,13 @@ end
 hold off
 
 title('Total Distance Broken Down By Species')
-    xlabel('Trial Number')
+    xlabel('Trial')
 colormap(summer(4));
 grid on
 l = cell(1,4);
 l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
 legend(p,l,'Location','bestoutside');
-text(7.8,11000,descr)
+text(7.8,9000,descr)
 
 %this plots the velocity bar plot with error bars, the error bars are added in the two
 %for loops 
@@ -310,13 +322,13 @@ end
 hold off
 
     title('Average Velocity Broken Down By Species')
-    xlabel('Trial Number') 
+    xlabel('Trial') 
     colormap(summer(4));
 grid on
 l = cell(1,4);
 l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
 legend(y,l,'Location','bestoutside');
-text(7.8,125,descr)
+text(7.8,75,descr)
 
 %this plots the total time bar plot with error bars, the error bars are added in the two
 %for loops
@@ -335,10 +347,10 @@ end
 hold off
 
     title('Average Time Broken Down By Species')
-    xlabel('Trial Number')     
+    xlabel('Trial')     
     colormap(summer(4));
 grid on
 l = cell(1,4);
 l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
 legend(u,l,'Location','bestoutside');
-text(7.8,225,descr)
+text(7.8,175,descr)
