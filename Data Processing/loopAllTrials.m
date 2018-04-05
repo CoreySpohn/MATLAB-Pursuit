@@ -328,7 +328,7 @@ grid on
 l = cell(1,4);
 l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
 legend(y,l,'Location','bestoutside');
-text(7.8,75,descr)
+text(7.8,30,descr)
 
 %this plots the total time bar plot with error bars, the error bars are added in the two
 %for loops
