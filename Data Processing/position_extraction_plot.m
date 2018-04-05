@@ -4,8 +4,8 @@
 clear
 
 
-trial = 16;
-replicate = 5;
+trial = 15;
+replicate = 1;
 
 %% Load the proper files based on the trial and replicate designated above
 gameName = ['trial', int2str(trial), 'rep', int2str(replicate)]; % use for filename output
@@ -92,12 +92,14 @@ end
 graphPositions = [humanMinnowPositions, humanSharkPositions, robotMinnowPositions,robotSharkPositions];
 graphLabel = [graphHMinnow, graphHShark, graphRMinnow, graphRShark];
 
-figure('units','normalized','outerposition',[0 0 1 1])
+% figure('units','normalized','outerposition',[0 0 1 1])
+figure()
 
 for i = 1:2:size(graphPositions,2)
     plot(graphPositions(:,i),graphPositions(:,i+1),'-*')
     hold on
 end
 
-legend(graphLabel,'Orientation','horizontal')
-ylim([-4000 2500])
+% legend(graphLabel,'Orientation','horizontal')
+ylim([-4000 4000])
+xlim([-4000 4000])

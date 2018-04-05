@@ -13,7 +13,7 @@ classdef Human < handle
         xLimits
         yLimits
     end    
-    
+
     methods
         function obj = Human(ID, role, name, xLimits, yLimits)
             %% This is the constructor for the minnow
