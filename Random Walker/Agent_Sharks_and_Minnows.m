@@ -111,7 +111,7 @@ for ii=1:min(length(sharkList(1).historicalPosition),length(sharkList(2).histori
         num = ['0', int2str(ii)];
     end
     figureName = ['Video\figure', num, '.png'];
-%     print(fig1, figureName)
-%     saveas(fig1, figureName)
+    print(fig1, figureName)
+    saveas(fig1, figureName)
     hold off
 end
