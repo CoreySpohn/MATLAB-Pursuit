@@ -11,7 +11,7 @@ avgVelocity = [];
         
         for p = 1:size(graphPositions,1)
         %The participant has to start in the start area which is -3000<x<-1000 and -4000<y<3000, this finds the first time the person enters the play area    
-        if (graphPositions(p,2*i-1)< -1000) && (graphPositions(p,2*i-1)> -3000) &&(graphPositions(p,2*i)< 3000) && (graphPositions(p,2*i-1)> -4000)
+        if (graphPositions(p,2*i-1)< 3000) && (graphPositions(p,2*i-1)> -3000) &&(graphPositions(p,2*i)< 3000) && (graphPositions(p,2*i-1)> -4000)
             j=p;
             break
         end
@@ -37,32 +37,33 @@ avgVelocity = [];
         dist = sqrt(xPos^2+yPos^2);
         totalDistance = dist +totalDistance;
             
-            %exiting the loop if the participant reaches the finish line at
-            %2000, or the person goes out of bounds in y direction y>4000
-            %or y <-3000, j-p is the end timestep minus the first timestep
+            %exiting the loop if the participant exits the play field, j-p is the end timestep minus the first timestep
             %in the play area
-            if graphPositions(j+1,2*i-1)> 2000
-                avgVelocity = [avgVelocity totalDistance/(j-p)];
+            if graphPositions(j+1,2*i-1)> 3000
+                avgVelocity = [avgVelocity totalDistance/(j+1-p)];
                 t=1;
             elseif graphPositions(j+1,2*i)> 3000
-                avgVelocity = [avgVelocity NaN];
+                avgVelocity = [avgVelocity totalDistance/(j+1-p)];
                 t=1;
             elseif graphPositions(j+1,2*i)< -4000
-                avgVelocity = [avgVelocity NaN];
+                avgVelocity = [avgVelocity totalDistance/(j+1-p)];
                 t=1;
-            elseif graphPositions(j+1,2*i-1)< -4000
-                avgVelocity = [avgVelocity NaN];
+            elseif graphPositions(j+1,2*i-1)< -3000
+                avgVelocity = [avgVelocity totalDistance/(j+1-p)];
                 t=1;
             %exiting the loop if the person is still in the play area at end of trial 
             elseif j ==size(graphPositions,1)-1
-                avgVelocity = [avgVelocity NaN];
+                avgVelocity = [avgVelocity totalDistance/(j+1-p)];
                 t=1;
             end
              
         j = j+1;
         
         end
-
+        
+        if avgVelocity(i)>200
+        avgVelocity(i) = NaN;
+        end
     end
       
     end
