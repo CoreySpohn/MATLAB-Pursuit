@@ -4,6 +4,7 @@
 % vector size is 21*17 because there are at most 21 replicates and at most 17
 % trials
 clear
+close all
 averageDistance = NaN(21,17);
 minimumDistance = NaN(21,17);
 traveledDistance = NaN(21,17);
@@ -265,7 +266,7 @@ for k1 = 1:size(h,2)
 end
 hold off
 
-    title('Minimum Distance Broken Down By Species')
+    title('Nearest Neighbor Distance Broken Down By Species')
     xlabel('Trial')
 colormap(summer(4));
 grid on
@@ -296,7 +297,7 @@ for k1 = 1:size(p,2)
 end
 hold off
 
-title('Total Distance Broken Down By Species')
+title('Path Length Broken Down By Species')
     xlabel('Trial')
 colormap(summer(4));
 grid on
@@ -321,7 +322,7 @@ for k1 = 1:size(y,2)
 end
 hold off
 
-    title('Average Velocity Broken Down By Species')
+    title('Average Speed Broken Down By Species')
     xlabel('Trial') 
     colormap(summer(4));
 grid on
