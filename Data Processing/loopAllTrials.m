@@ -9,6 +9,10 @@ averageDistance = NaN(21,17);
 minimumDistance = NaN(21,17);
 traveledDistance = NaN(21,17);
 xMin =[];
+boxDataMin =[];
+boxDataTotal =[];
+boxDataVel =[];
+boxDataTime=[];
 yMin = [];
 xTotal =[];
 yTotal = [];
@@ -223,6 +227,12 @@ end
     yVelSpecies = [yVelSpecies ;mean(c(1:hMinnow),'omitnan') mean(c(hMinnow+1:hShark+hMinnow),'omitnan') mean(c(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(c(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan') NaN NaN NaN];
     yTimeSpecies = [yTimeSpecies ; mean(d(1:hMinnow),'omitnan') mean(d(hMinnow+1:hShark+hMinnow),'omitnan') mean(d(hShark+hMinnow+1:hShark+hMinnow+rMinnow),'omitnan') mean(d(rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),'omitnan') NaN NaN NaN];
     
+    %box plot
+    boxDataMin = [boxDataMin transpose(mean(minimumAverageSplit(:,1:hMinnow),2,'omitnan')) transpose(mean(minimumAverageSplit(:,hMinnow+1:hShark+hMinnow),2,'omitnan')) transpose(mean(minimumAverageSplit(:,hShark+hMinnow+1:hShark+hMinnow+rMinnow),2,'omitnan')) transpose(mean(minimumAverageSplit(:,rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),2,'omitnan'))];
+    boxDataTotal = [boxDataTotal transpose(mean(totalDistanceSplit(:,1:hMinnow),2,'omitnan')) transpose(mean(totalDistanceSplit(:,hMinnow+1:hShark+hMinnow),2,'omitnan')) transpose(mean(totalDistanceSplit(:,hShark+hMinnow+1:hShark+hMinnow+rMinnow),2,'omitnan')) transpose(mean(totalDistanceSplit(:,rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),2,'omitnan'))];
+    boxDataVel = [boxDataVel transpose(mean(avgVelSplit(:,1:hMinnow),2,'omitnan')) transpose(mean(avgVelSplit(:,hMinnow+1:hShark+hMinnow),2,'omitnan')) transpose(mean(avgVelSplit(:,hShark+hMinnow+1:hShark+hMinnow+rMinnow),2,'omitnan')) transpose(mean(avgVelSplit(:,rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),2,'omitnan'))];
+    boxDataTime = [boxDataTime transpose(mean(avgTSplit(:,1:hMinnow),2,'omitnan')) transpose(mean(avgTSplit(:,hMinnow+1:hShark+hMinnow),2,'omitnan')) transpose(mean(avgTSplit(:,hShark+hMinnow+1:hShark+hMinnow+rMinnow),2,'omitnan')) transpose(mean(avgTSplit(:,rMinnow+hShark+hMinnow+1:hShark+hMinnow+rMinnow+rShark),2,'omitnan'))];
+    
     %standard deviation for the replicates in each trial
     yMinStd = [yMinStd ; std(mean(minimumAverageSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(minimumAverageSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(minimumAverageSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(minimumAverageSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan') NaN NaN NaN];
     yTotalStd = [yTotalStd ;std(mean(totalDistanceSplit(:,1:hMinnow),2,'omitnan'),'omitnan') std(mean(totalDistanceSplit(:,1+hMinnow:hMinnow+hShark),2,'omitnan'),'omitnan') std(mean(totalDistanceSplit(:,1+hMinnow+hShark:hMinnow+hShark+rMinnow),2,'omitnan'),'omitnan') std(mean(totalDistanceSplit(:,1+hMinnow+hShark+rMinnow:hMinnow+hShark+rMinnow+rShark),2,'omitnan'),'omitnan') NaN NaN NaN];
@@ -355,3 +365,89 @@ l = cell(1,4);
 l{1}='Human Minnow'; l{2}='Human Shark'; l{3}='Robot Minnow'; l{4}='Robot Shark';    
 legend(u,l,'Location','bestoutside');
 text(7.8,175,descr)
+
+%box plot
+xd = [1.*ones(1,21), 2.*ones(1,21), 3.*ones(1,21), 4.*ones(1,21),5.*ones(1,21),6.*ones(1,21),7.*ones(1,21),8.*ones(1,21),9.*ones(1,21),10.*ones(1,21),11.*ones(1,21),12.*ones(1,21),13.*ones(1,21),14.*ones(1,21),15.*ones(1,21),16.*ones(1,21),17.*ones(1,21),18.*ones(1,21),19.*ones(1,21),20.*ones(1,21),21.*ones(1,21),22.*ones(1,21),23.*ones(1,21),24.*ones(1,21),25.*ones(1,21),26.*ones(1,21),27.*ones(1,21),28.*ones(1,21)];
+figure()
+boxplot(boxDataMin,xd,'PlotStyle','compact')
+title('Average Nearest Neighbor Distance')
+figure()
+boxplot(boxDataTotal,xd,'PlotStyle','compact')
+title('Average Path Length')
+figure()
+boxplot(boxDataVel,xd,'PlotStyle','compact')
+title('Average Speed')
+figure()
+boxplot(boxDataTime,xd,'PlotStyle','compact')
+title('Average Time')
+%statistics trial A and E
+disp('For Trials A and E:')
+for i =1:4
+if i ==1
+    species = 'Human Minnow';
+elseif i==2
+    species = 'Human Shark';
+elseif i ==3
+    species ='Robot Minnow';
+elseif i ==4
+    species ='Robot Shark';
+end
+to = (yMinSpecies(1,i)-yMinSpecies(5,i))/sqrt(yMinStd(i,1)^2/21+yMinStd(i,5)^2/2);
+v = (yMinStd(i,1)^2/21+yMinStd(i,5)^2/2)^2/((yMinStd(i,1)/21)^2/20+(yMinStd(i,5)/2)^2);
+sTex = ['For ', species, ' the test statistic is ', num2str(to), ' and DOF is ',num2str(v)];
+disp(sTex)
+end
+
+%statistics trial A and C
+disp('For Trials A and C:')
+for i =1:4
+if i ==1
+    species = 'Human Minnow';
+elseif i==2
+    species = 'Human Shark';
+elseif i ==3
+    species ='Robot Minnow';
+elseif i ==4
+    species ='Robot Shark';
+end
+to = (yMinSpecies(1,i)-yMinSpecies(3,i))/sqrt(yMinStd(i,1)^2/21+yMinStd(i,3)^2/12);
+v = (yMinStd(i,1)^2/21+yMinStd(i,3)^2/12)^2/((yMinStd(i,1)/21)^2/20+(yMinStd(i,3)/12)^2/11);
+sTex = ['For ', species, ' the test statistic is ', num2str(to), ' and DOF is ',num2str(v)];
+disp(sTex)
+end
+
+%statistics trial B and F
+disp('For Trials B and F:')
+for i =1:4
+if i ==1
+    species = 'Human Minnow';
+elseif i==2
+    species = 'Human Shark';
+elseif i ==3
+    species ='Robot Minnow';
+elseif i ==4
+    species ='Robot Shark';
+end
+to = (yMinSpecies(2,i)-yMinSpecies(6,i))/sqrt(yMinStd(i,2)^2/15+yMinStd(i,6)^2/6);
+v = (yMinStd(i,2)^2/15+yMinStd(i,6)^2/6)^2/((yMinStd(i,2)/15)^2/14+(yMinStd(i,6)/6)^2/5);
+sTex = ['For ', species, ' the test statistic is ', num2str(to), ' and DOF is ',num2str(v)];
+disp(sTex)
+end
+
+%statistics trial B and D
+disp('For Trials B and D:')
+for i =1:4
+if i ==1
+    species = 'Human Minnow';
+elseif i==2
+    species = 'Human Shark';
+elseif i ==3
+    species ='Robot Minnow';
+elseif i ==4
+    species ='Robot Shark';
+end
+to = (yMinSpecies(2,i)-yMinSpecies(4,i))/sqrt(yMinStd(i,2)^2/15+yMinStd(i,4)^2/10);
+v = (yMinStd(i,2)^2/15+yMinStd(i,4)^2/10)^2/((yMinStd(i,2)/15)^2/14+(yMinStd(i,4)/10)^2/9);
+sTex = ['For ', species, ' the test statistic is ', num2str(to), ' and DOF is ',num2str(v)];
+disp(sTex)
+end
