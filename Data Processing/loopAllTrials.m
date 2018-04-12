@@ -244,20 +244,21 @@ end
 end
 
 descr = {'Trial Descriptions:';
-         '       |A   |B  |C |D |E|F |G';
+         '          |A | B |C |D | E |F |G';
          '        --------------------------';
-         'Hmn|10 |5  |10|5 |8 |3 |8';
-         'Mnw|       ';
+         '   Hmn|10|5 |10 |5 |8 |3 |8';
+         '   Mnw|       ';
          '                           ';
-         'Hmn|2   |2  |0  |0 |2 |2 |1 ';
-         'Srk  |';
+         '   Hmn|2 | 2 |0  |0 |2 |2 |1 ';
+         '   Srk  |';
          '                         ';
-         'Rbt  |0   |0  |0  |0 |2 |2 |2 ';
-         'Mnw|';
+         '   Rbt  |0 | 0  |0 |0 |2 |2 |2 ';
+         '   Mnw|';
          '                         ';
-         'Rbt  |0   |0  |3  |3 |0 |0 |0 ';
-         'Srk  |';};    
-
+         '   Rbt  |0 | 0  |3 |3 |0 |0 |0 ';
+         '   Srk  |';};    
+    
+     
 %plotting the data analysis
 
 %this plots the minimum distance bar plot with error bars, the error bars are added in the two

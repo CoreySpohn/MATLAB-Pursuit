@@ -3,15 +3,6 @@
 % 16 - 6 Replicates - 2 HS, 3 HM, 2 RM
 % 17 - 4 Replicates - 1 HS, 8 HM, 2 RM
 
-trial15HumanToRobot = [];
-trial15HumanToHuman = [];
-trial16HumanToRobot = [];
-trial16HumanToHuman = [];
-trial17HumanToRobot = [];
-trial17HumanToHuman = [];
-
-averageMinDistance = [];
-
 clear
 close all
 
@@ -144,8 +135,8 @@ for trial = 15:17
                             continue
                         end
                         
-                        % if either minnow is out of bounds don't count this
-                        % minnow for this step
+                        % if either minnow is out of bounds this distance
+                        % is a NaN
                         if humanMinnowPositions(j,2*i-1)> 3000 || humanMinnowPositions(j,2*i-1)< -4000
                             dist = NaN;
                             distances = [distances; dist];
@@ -188,7 +179,7 @@ for trial = 15:17
                 end
                 averageMinHumanDistances = nanmean(minDistances);
                 
-                totalMinHumanDistance(replicate, trial-14) = mean(averageMinHumanDistances);
+                totalMinHumanDistance(replicate, trial-14) = nanmean(averageMinHumanDistances);
             end
             
             %Now do the same for the humans vs the robots
@@ -252,9 +243,17 @@ for trial = 15:17
                 end
                 averageMinRobotDistances = nanmean(minDistances);
                 
-                totalMinRobotDistance(replicate, trial-14) = mean(averageMinRobotDistances);
+                totalMinRobotDistance(replicate, trial-14) = nanmean(averageMinRobotDistances);
             end
         
+            % now calculate how much further the humans stayed from the
+            % robots for each trial when compared to the humans
+            for i = 1:size(totalMinHumanDistance,2)
+                for j = 1:size(totalMinHumanDistance,1)
+                    dividedComparison(j, i) = totalMinRobotDistance(j, i) / totalMinHumanDistance(j, i);
+                    subtractedComparison(j, i)= totalMinRobotDistance(j, i) - totalMinHumanDistance(j, i);
+                end
+            end
     end
     
 end
