@@ -61,7 +61,6 @@ for k = 1:loop0
                     min = dist;
                 end
             end
-        
         end
         
         total = total + min;
