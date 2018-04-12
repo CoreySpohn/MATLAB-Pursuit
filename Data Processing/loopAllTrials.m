@@ -244,19 +244,19 @@ end
 end
 
 descr = {'Trial Descriptions:';
-         '          |A | B |C |D | E |F |G';
+         '              |A | B |C |D | E |F |G';
          '        --------------------------';
-         '   Hmn|10|5 |10 |5 |8 |3 |8';
-         '   Mnw|       ';
+         '   Human|10|5 |10 |5 |8 |3 |8';
+         '   Minnow|       ';
          '                           ';
-         '   Hmn|2 | 2 |0  |0 |2 |2 |1 ';
-         '   Srk  |';
+         '   Human|2 | 2 |0  |0 |2 |2 |1 ';
+         '   Shark  |';
          '                         ';
-         '   Rbt  |0 | 0  |0 |0 |2 |2 |2 ';
-         '   Mnw|';
+         '   Robot  |0 | 0  |0 |0 |2 |2 |2 ';
+         '   Minnow|';
          '                         ';
-         '   Rbt  |0 | 0  |3 |3 |0 |0 |0 ';
-         '   Srk  |';};    
+         '   Robot  |0 | 0  |3 |3 |0 |0 |0 ';
+         '   Shark  |';};    
     
      
 %plotting the data analysis
@@ -383,6 +383,7 @@ boxplot(boxDataTime,xd,'PlotStyle','compact')
 title('Average Time')
 %statistics trial A and E
 disp('For Trials A and E:')
+
 for i =1:4
 if i ==1
     species = 'Human Minnow';
@@ -395,7 +396,13 @@ elseif i ==4
 end
 to = (yMinSpecies(1,i)-yMinSpecies(5,i))/sqrt(yMinStd(i,1)^2/21+yMinStd(i,5)^2/2);
 v = (yMinStd(i,1)^2/21+yMinStd(i,5)^2/2)^2/((yMinStd(i,1)/21)^2/20+(yMinStd(i,5)/2)^2);
-sTex = ['For ', species, ' the test statistic is ', num2str(to), ' and DOF is ',num2str(v)];
+t1 = (yTotalSpecies(1,i)-yTotalSpecies(5,i))/sqrt(yTotalStd(i,1)^2/21+yTotalStd(i,5)^2/2);
+v1 = (yTotalStd(i,1)^2/21+yTotalStd(i,5)^2/2)^2/((yTotalStd(i,1)/21)^2/20+(yTotalStd(i,5)/2)^2);
+t2 = (yVelSpecies(1,i)-yVelSpecies(5,i))/sqrt(yVelStd(i,1)^2/21+yVelStd(i,5)^2/2);
+v2 = (yVelStd(i,1)^2/21+yVelStd(i,5)^2/2)^2/((yVelStd(i,1)/21)^2/20+(yVelStd(i,5)/2)^2);
+t3 = (yTimeSpecies(1,i)-yTimeSpecies(5,i))/sqrt(yTimeStd(i,1)^2/21+yTimeStd(i,5)^2/2);
+v3 = (yTimeStd(i,1)^2/21+yTimeStd(i,5)^2/2)^2/((yTimeStd(i,1)/21)^2/20+(yTimeStd(i,5)/2)^2);
+sTex = ['For ', species, ' the test statistic is ', num2str(to),',',num2str(t1),',',num2str(t2),',',num2str(t3), ' and DOF is ',num2str(v),',',num2str(v1),',',num2str(v2),',',num2str(v3)];
 disp(sTex)
 end
 
@@ -413,7 +420,13 @@ elseif i ==4
 end
 to = (yMinSpecies(1,i)-yMinSpecies(3,i))/sqrt(yMinStd(i,1)^2/21+yMinStd(i,3)^2/12);
 v = (yMinStd(i,1)^2/21+yMinStd(i,3)^2/12)^2/((yMinStd(i,1)/21)^2/20+(yMinStd(i,3)/12)^2/11);
-sTex = ['For ', species, ' the test statistic is ', num2str(to), ' and DOF is ',num2str(v)];
+t1 = (yTotalSpecies(1,i)-yTotalSpecies(3,i))/sqrt(yTotalStd(i,1)^2/21+yTotalStd(i,3)^2/12);
+v1 = (yTotalStd(i,1)^2/21+yTotalStd(i,3)^2/12)^2/((yTotalStd(i,1)/21)^2/20+(yTotalStd(i,3)/12)^2/11);
+t2 = (yVelSpecies(1,i)-yVelSpecies(3,i))/sqrt(yVelStd(i,1)^2/21+yVelStd(i,3)^2/12);
+v2 = (yVelStd(i,1)^2/21+yVelStd(i,3)^2/12)^2/((yVelStd(i,1)/21)^2/20+(yVelStd(i,3)/12)^2/11);
+t3 = (yTimeSpecies(1,i)-yTimeSpecies(3,i))/sqrt(yTimeStd(i,1)^2/21+yTimeStd(i,3)^2/12);
+v3 = (yTimeStd(i,1)^2/21+yTimeStd(i,3)^2/12)^2/((yTimeStd(i,1)/21)^2/20+(yTimeStd(i,3)/12)^2/11);
+sTex = ['For ', species, ' the test statistic is ', num2str(to),',',num2str(t1),',',num2str(t2),',',num2str(t3), ' and DOF is ',num2str(v),',',num2str(v1),',',num2str(v2),',',num2str(v3)];
 disp(sTex)
 end
 
@@ -431,7 +444,13 @@ elseif i ==4
 end
 to = (yMinSpecies(2,i)-yMinSpecies(6,i))/sqrt(yMinStd(i,2)^2/15+yMinStd(i,6)^2/6);
 v = (yMinStd(i,2)^2/15+yMinStd(i,6)^2/6)^2/((yMinStd(i,2)/15)^2/14+(yMinStd(i,6)/6)^2/5);
-sTex = ['For ', species, ' the test statistic is ', num2str(to), ' and DOF is ',num2str(v)];
+t1 = (yTotalSpecies(2,i)-yTotalSpecies(6,i))/sqrt(yTotalStd(i,2)^2/15+yTotalStd(i,6)^2/6);
+v1 = (yTotalStd(i,2)^2/15+yTotalStd(i,6)^2/6)^2/((yTotalStd(i,2)/15)^2/14+(yTotalStd(i,6)/6)^2/5);
+t2 = (yVelSpecies(2,i)-yVelSpecies(6,i))/sqrt(yVelStd(i,2)^2/15+yVelStd(i,6)^2/6);
+v2 = (yVelStd(i,2)^2/15+yVelStd(i,6)^2/6)^2/((yVelStd(i,2)/15)^2/14+(yVelStd(i,6)/6)^2/5);
+t3 = (yTimeSpecies(2,i)-yTimeSpecies(6,i))/sqrt(yTimeStd(i,2)^2/15+yTimeStd(i,6)^2/6);
+v3 = (yTimeStd(i,2)^2/15+yTimeStd(i,6)^2/6)^2/((yTimeStd(i,2)/15)^2/14+(yTimeStd(i,6)/6)^2/5);
+sTex = ['For ', species, ' the test statistic is ', num2str(to),',',num2str(t1),',',num2str(t2),',',num2str(t3), ' and DOF is ',num2str(v),',',num2str(v1),',',num2str(v2),',',num2str(v3)];
 disp(sTex)
 end
 
@@ -449,6 +468,12 @@ elseif i ==4
 end
 to = (yMinSpecies(2,i)-yMinSpecies(4,i))/sqrt(yMinStd(i,2)^2/15+yMinStd(i,4)^2/10);
 v = (yMinStd(i,2)^2/15+yMinStd(i,4)^2/10)^2/((yMinStd(i,2)/15)^2/14+(yMinStd(i,4)/10)^2/9);
-sTex = ['For ', species, ' the test statistic is ', num2str(to), ' and DOF is ',num2str(v)];
+t1 = (yTotalSpecies(2,i)-yTotalSpecies(4,i))/sqrt(yTotalStd(i,2)^2/15+yTotalStd(i,4)^2/10);
+v1 = (yTotalStd(i,2)^2/15+yTotalStd(i,4)^2/10)^2/((yTotalStd(i,2)/15)^2/14+(yTotalStd(i,4)/10)^2/9);
+t2 = (yVelSpecies(2,i)-yVelSpecies(4,i))/sqrt(yVelStd(i,2)^2/15+yVelStd(i,4)^2/10);
+v2 = (yVelStd(i,2)^2/15+yVelStd(i,4)^2/10)^2/((yVelStd(i,2)/15)^2/14+(yVelStd(i,4)/10)^2/9);
+t3 = (yTimeSpecies(2,i)-yTimeSpecies(4,i))/sqrt(yTimeStd(i,2)^2/15+yTimeStd(i,4)^2/10);
+v3 = (yTimeStd(i,2)^2/15+yTimeStd(i,4)^2/10)^2/((yTimeStd(i,2)/15)^2/14+(yTimeStd(i,4)/10)^2/9);
+sTex = ['For ', species, ' the test statistic is ', num2str(to),',',num2str(t1),',',num2str(t2),',',num2str(t3), ' and DOF is ',num2str(v),',',num2str(v1),',',num2str(v2),',',num2str(v3)];
 disp(sTex)
 end
