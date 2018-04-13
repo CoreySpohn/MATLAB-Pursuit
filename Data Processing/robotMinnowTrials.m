@@ -182,6 +182,9 @@ for trial = 15:17
             
             totalMinHumanDistance(replicate, trial-12) = nanmean(averageMinHumanDistances);
             totalMinHumanDistance(totalMinHumanDistance == 0 ) = NaN;
+            totalMinHumanStd(replicate, trial-12) = sqrt(sum(var(averageMinHumanDistances, 'omitnan')));
+            totalMinHumanStd(totalMinHumanStd == 0 ) = NaN;
+
         end
         
         %Now do the same for the humans vs the robots
@@ -248,6 +251,10 @@ for trial = 15:17
             totalMinRobotDistance(replicate, trial-12) = nanmean(averageMinRobotDistances);
             totalMinRobotDistance(totalMinRobotDistance == 0 ) = NaN;
             finalMinRobotDistances = nanmean(totalMinRobotDistance);
+            
+            totalMinRobotStd(replicate, trial-12) = sqrt(sum(var(averageMinRobotDistances, 'omitnan')));
+            totalMinRobotStd(totalMinRobotStd == 0 ) = NaN;
+            finalMinRobotStd = sqrt(nanmean(totalMinRobotStd.^2));
         end
         
         % now calculate how much further the humans stayed from the
@@ -400,12 +407,18 @@ for trial = 3:4
                     minDistance = min(distances);
                 end
                 minDistances(j,i) = minDistance;
+                minStd(j, i) = sqrt(mean(var(minDistances/1000, 'omitnan')));
             end
+            
             averageMinHumanDistances = nanmean(minDistances)/1000;
             
             totalMinHumanDistance(replicate, trial-2) = nanmean(averageMinHumanDistances);
             totalMinHumanDistance(totalMinHumanDistance == 0 ) = NaN;
             finalMinHumanDistances = nanmean(totalMinHumanDistance);
+            
+            totalMinHumanStd(replicate, trial-2) = sqrt(sum(var(averageMinHumanDistances, 'omitnan')));
+            totalMinHumanStd(totalMinHumanStd == 0 ) = NaN;
+            finalMinHumanStd = sqrt(nanmean(totalMinHumanStd.^2));
         end
         
     end
@@ -413,23 +426,24 @@ for trial = 3:4
 end
 
 finalMinDistances = [transpose(finalMinHumanDistances), transpose(finalMinRobotDistances)];
+finalMinStds = [transpose(finalMinHumanStd), transpose(finalMinRobotStd)];
 
 %this plots the velocity bar plot with error bars, the error bars are added in the two
 %for loops 
 figure()
-y=bar(finalMinDistances);
-set(gca,'XTickLabel', {'A','B','E','F','G'})
-
-% yVelStd = transpose(yVelStd);
+y=barwitherr(finalMinStds, finalMinDistances);
 % for k1 = 1:size(y,2)
 %     ctr(k1,:) = bsxfun(@plus, y(k1).XData, [y(k1).XOffset]');             % Centres Of Bar Groups
-%     ydt(k1,:) = y(k1).YData;                                               % Y-Data Of Bar Groups
+%     ydt(k1,:) = y(k1).YData;                                                 % Y-Data Of Bar Groups
 % end
 % hold on
 % for k1 = 1:size(y,2)
-%     errorbar(ctr(k1,:), ydt(k1,:), yVelStd(k1,:), '.r')
+%     errorbar(ctr(k1,:), ydt(k1,:), finalMinStds(k1,:), '.r')
 % end
 % hold off
+
+set(gca,'XTickLabel', {'A','B','E','F','G'})
+
 
 title('Nearest Neighbor Distances For Human Minnows')
 xlabel('Trial')
