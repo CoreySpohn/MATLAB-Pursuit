@@ -158,10 +158,10 @@ end
 graphPositions = transpose(fixedPositions);
 
 %Calling function for data anlysis and storing function return values 
-minimumAverageSplit(w,1:size(graphPositions,2)/2) = minAverageSplit(graphPositions);
-totalDistanceSplit(w,1:size(graphPositions,2)/2) = totDistanceSplit(graphPositions);
-avgVelSplit(w,1:size(graphPositions,2)/2) = avgVelocitySplit(graphPositions);
-avgTSplit(w,1:size(graphPositions,2)/2) = avgTimeSplit(graphPositions);
+minimumAverageSplit(w,1:size(graphPositions,2)/2) = 1/1000*minAverageSplit(graphPositions);
+totalDistanceSplit(w,1:size(graphPositions,2)/2) = 1/1000*totDistanceSplit(graphPositions);
+avgVelSplit(w,1:size(graphPositions,2)/2) = 60/1000*avgVelocitySplit(graphPositions);
+avgTSplit(w,1:size(graphPositions,2)/2) = 1/60*avgTimeSplit(graphPositions);
 
 catch
 end
@@ -265,7 +265,7 @@ descr = {'Trial Descriptions:';
 %for loops
 figure()
 h= bar(yMinSpecies)
-set(gca,'XTickLabel', {'A','B','C','D','E','F','G'})
+set(gca,'XTickLabel', {'A','B','C','D','E','F','G'},'fontsize',12)
 yMinStd = transpose(yMinStd);
 for k1 = 1:size(h,2)
     ctr(k1,:) = bsxfun(@plus, h(k1).XData, [h(k1).XOffset]');             % Centres Of Bar Groups
@@ -279,6 +279,7 @@ hold off
 
     title('Nearest Neighbor Distance Broken Down By Species')
     xlabel('Trial')
+    ylabel('Nearest Neighbor (m)')
 colormap(summer(4));
 grid on
 l = cell(1,4);
@@ -296,7 +297,7 @@ text(7.8,1100,descr)
 %for loops 
 figure()
 p=bar(yTotalSpecies)
-set(gca,'XTickLabel', {'A','B','C','D','E','F','G'})
+set(gca,'XTickLabel', {'A','B','C','D','E','F','G'},'fontsize',12)
 yTotalStd = transpose(yTotalStd);
 for k1 = 1:size(p,2)
     ctr(k1,:) = bsxfun(@plus, p(k1).XData, [p(k1).XOffset]');             % Centres Of Bar Groups
@@ -310,6 +311,7 @@ hold off
 
 title('Path Length Broken Down By Species')
     xlabel('Trial')
+    ylabel('Path Length (m)')
 colormap(summer(4));
 grid on
 l = cell(1,4);
@@ -321,7 +323,7 @@ text(7.8,9000,descr)
 %for loops 
 figure()
 y=bar(yVelSpecies)
-set(gca,'XTickLabel', {'A','B','C','D','E','F','G'})
+set(gca,'XTickLabel', {'A','B','C','D','E','F','G'},'fontsize',12)
 yVelStd = transpose(yVelStd);
 for k1 = 1:size(y,2)
     ctr(k1,:) = bsxfun(@plus, y(k1).XData, [y(k1).XOffset]');             % Centres Of Bar Groups
@@ -334,7 +336,8 @@ end
 hold off
 
     title('Average Speed Broken Down By Species')
-    xlabel('Trial') 
+    xlabel('Trial')
+    ylabel('Speed (m/s)')
     colormap(summer(4));
 grid on
 l = cell(1,4);
@@ -346,7 +349,7 @@ text(7.8,30,descr)
 %for loops
 figure()
 u=bar(yTimeSpecies)
-set(gca,'XTickLabel', {'A','B','C','D','E','F','G'})
+set(gca,'XTickLabel', {'A','B','C','D','E','F','G'},'fontsize',12)
 yTimeStd = transpose(yTimeStd);
 for k1 = 1:size(u,2)
     ctr(k1,:) = bsxfun(@plus, u(k1).XData, [u(k1).XOffset]');             % Centres Of Bar Groups
@@ -359,7 +362,8 @@ end
 hold off
 
     title('Average Time Broken Down By Species')
-    xlabel('Trial')     
+    xlabel('Trial')
+    ylabel('Time (sec)')
     colormap(summer(4));
 grid on
 l = cell(1,4);
