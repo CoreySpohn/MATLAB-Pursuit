@@ -39,7 +39,7 @@ velTrial16 = [];
 minTrial3 = [];
 minTrial4 = [];
 minTrial15 = [];
-minTrial16 = [];
+yVelTrialStd16 = [];
 
 %looping through every trial
 for l =1:17
@@ -276,20 +276,6 @@ velTrial4(isnan(velTrial4)) = [];
 velTrial15(isnan(velTrial15)) = [];
 velTrial16(isnan(velTrial16)) = [];
 
-minTrial3(isnan(minTrial3)) = [];
-minTrial4(isnan(minTrial4)) = [];
-minTrial15(isnan(minTrial15)) = [];
-minTrial16(isnan(minTrial16)) = [];
-
-velTrial3 = transpose(velTrial3);
-velTrial4 = transpose(velTrial4);
-velTrial15 = transpose(velTrial15);
-velTrial16 = transpose(velTrial16);
-
-minTrial3 = transpose(minTrial3);
-minTrial4 = transpose(minTrial4);
-minTrial15 = transpose(minTrial15);
-minTrial16 = transpose(minTrial16);
 
 descr = {'Trial Descriptions:';
     '              |A | B |C |D | E |F |G';
@@ -311,7 +297,7 @@ descr = {'Trial Descriptions:';
 
 %this plots the minimum distance bar plot with error bars, the error bars are added in the two
 %for loops
-figure('pos',[10 10 800 800])
+figure('pos',[10 10 600 600])
 h= bar(yMinSpecies)
 set(gca,'XTickLabel', {'A','B','C','D','E','F','G'},'fontsize',12)
 yMinStd = transpose(yMinStd);
@@ -343,7 +329,7 @@ text(7.8,1100,descr)
 
 %this plots the total distance bar plot with error bars, the error bars are added in the two
 %for loops
-figure('pos',[10 10 800 800])
+figure('pos',[10 10 600 600])
 p=bar(yTotalSpecies)
 set(gca,'XTickLabel', {'A','B','C','D','E','F','G'},'fontsize',12)
 yTotalStd = transpose(yTotalStd);
@@ -369,7 +355,7 @@ text(7.8,9000,descr)
 
 %this plots the velocity bar plot with error bars, the error bars are added in the two
 %for loops
-figure('pos',[10 10 800 800])
+figure('pos',[10 10 600 600])
 y=bar(yVelSpecies)
 set(gca,'XTickLabel', {'A','B','C','D','E','F','G'},'fontsize',12)
 yVelStd = transpose(yVelStd);
@@ -395,7 +381,7 @@ text(7.8,30,descr)
 
 %this plots the total time bar plot with error bars, the error bars are added in the two
 %for loops
-figure('pos',[10 10 800 800])
+figure('pos',[10 10 600 600])
 u=bar(yTimeSpecies)
 set(gca,'XTickLabel', {'A','B','C','D','E','F','G'},'fontsize',12)
 yTimeStd = transpose(yTimeStd);

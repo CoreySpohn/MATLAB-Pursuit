@@ -421,6 +421,12 @@ for trial = 3:4
             finalMinHumanStd = sqrt(nanmean(totalMinHumanStd.^2));
         end
         
+        if trial == 3
+            
+        elseif trial == 4
+            
+        end
+        
     end
     
 end
@@ -428,23 +434,10 @@ end
 finalMinDistances = [transpose(finalMinHumanDistances), transpose(finalMinRobotDistances)];
 finalMinStds = [transpose(finalMinHumanStd), transpose(finalMinRobotStd)];
 
-%this plots the velocity bar plot with error bars, the error bars are added in the two
-%for loops 
+%this plots everything using the barrwitherr function found online
 figure()
 y=barwitherr(finalMinStds, finalMinDistances);
-% for k1 = 1:size(y,2)
-%     ctr(k1,:) = bsxfun(@plus, y(k1).XData, [y(k1).XOffset]');             % Centres Of Bar Groups
-%     ydt(k1,:) = y(k1).YData;                                                 % Y-Data Of Bar Groups
-% end
-% hold on
-% for k1 = 1:size(y,2)
-%     errorbar(ctr(k1,:), ydt(k1,:), finalMinStds(k1,:), '.r')
-% end
-% hold off
-
 set(gca,'XTickLabel', {'A','B','E','F','G'})
-
-
 title('Nearest Neighbor Distances For Human Minnows')
 xlabel('Trial')
 ylabel('Distance (m)')
